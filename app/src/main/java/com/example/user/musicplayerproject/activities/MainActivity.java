@@ -1,4 +1,4 @@
-package com.example.user.musicplayerproject;
+package com.example.user.musicplayerproject.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,11 +7,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.user.musicplayerproject.R;
+import com.example.user.musicplayerproject.fragments.ListFragment;
+import com.example.user.musicplayerproject.fragments.PlayerFragment;
+import com.example.user.musicplayerproject.fragments.SongFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     // git에 올리기
-    private Fragment mPlayerFragment;
-    private Fragment mSongFragment;
+    private PlayerFragment mPlayerFragment;
+    private SongFragment mSongFragment;
+    private ListFragment mListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPlayerFragment = new PlayerFragment();
         mSongFragment = new SongFragment();
-
+        mListFragment = new ListFragment();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
