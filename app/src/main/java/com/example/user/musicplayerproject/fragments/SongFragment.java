@@ -1,7 +1,6 @@
 package com.example.user.musicplayerproject.fragments;
 
 import android.content.Intent;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,13 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.example.user.musicplayerproject.MusicFile;
 import com.example.user.musicplayerproject.R;
-import com.example.user.musicplayerproject.ustils.MyUtils;
+import com.example.user.musicplayerproject.activities.SelectSongActivity;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -30,6 +28,7 @@ public class SongFragment extends Fragment implements View.OnClickListener {
 
 
     public static final int PICK_AUDIO_REQUEST_CODE = 1000;
+    public static final int MOVE_SELECTSONG_REQUEST_CODE = 1000;
     private Realm mRealm;
 
     @Override
@@ -63,7 +62,6 @@ public class SongFragment extends Fragment implements View.OnClickListener {
 
 
 
-
     }
 
 
@@ -72,14 +70,11 @@ public class SongFragment extends Fragment implements View.OnClickListener {
 
         switch (v.getId()) {
             case R.id.pick_button:
-                Intent intent = new Intent();
-                intent.setType("audio/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Music"), PICK_AUDIO_REQUEST_CODE);
-
+                Intent intent = new Intent(getContext(), SelectSongActivity.class);
+                // 주거니 받거니
+                getActivity().startActivityForResult(intent, MOVE_SELECTSONG_REQUEST_CODE);
+                getActivity().overridePendingTransition(0, 0);
                 break;
-
 
             default:
                 break;
@@ -97,41 +92,43 @@ public class SongFragment extends Fragment implements View.OnClickListener {
         if (requestCode == PICK_AUDIO_REQUEST_CODE && resultCode == RESULT_OK && data.getData() != null) {
             final Uri uri = data.getData();
             // 테스트
-//            Toast.makeText(getActivity(), uri + "", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), uri + "", Toast.LENGTH_SHORT).show();
 
-            final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-            retriever.setDataSource(MyUtils.getRealPath(getContext(), uri));
-
-
-            // 미디어 정보
-            final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-            final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
-            final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
-
-            // 오디오 앨범 자켓 이미지
-            final String image = retriever.getEmbeddedPicture().toString();
-
-            // TODO 렘에 저장
-            // 픽 한 음악 파일 렘에 저장
-            mRealm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    MusicFile musicFile = mRealm.createObject(MusicFile.class);
-                    musicFile.setArtist(artist);
-                    musicFile.setTitle(title);
-                    musicFile.setDuration(duration);
-                    musicFile.setImage(image);
-                    musicFile.setUri(uri.toString());
-
-                }
-            });
-
-
-
-
-            // TODO
-            // 가져온 파일 리스트로 뿌리기
-            RealmResults<MusicFile> results = mRealm.where(MusicFile.class).findAll();
+//
+//
+//            final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//            retriever.setDataSource(MyUtils.getRealPath(getContext(), uri));
+//
+//
+//            // 미디어 정보
+//            final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+//            final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+//            final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
+//
+//            // 오디오 앨범 자켓 이미지
+//            final String image = retriever.getEmbeddedPicture().toString();
+//
+//            // TODO 렘에 저장
+//            // 픽 한 음악 파일 렘에 저장
+//            mRealm.executeTransaction(new Realm.Transaction() {
+//                @Override
+//                public void execute(Realm realm) {
+//                    MusicFile musicFile = mRealm.createObject(MusicFile.class);
+//                    musicFile.setArtist(artist);
+//                    musicFile.setTitle(title);
+//                    musicFile.setDuration(duration);
+//                    musicFile.setImage(image);
+//                    musicFile.setUri(uri.toString());
+//
+//                }
+//            });
+//
+//
+//
+//
+//            // TODO
+//            // 가져온 파일 리스트로 뿌리기
+//            RealmResults<MusicFile> results = mRealm.where(MusicFile.class).findAll();
 
         }
     }

@@ -56,6 +56,7 @@ public class MusicFile extends RealmObject{
         this.artist = artist;
     }
 
+
     @Override
     public String toString() {
         return "MusicFile{" +
