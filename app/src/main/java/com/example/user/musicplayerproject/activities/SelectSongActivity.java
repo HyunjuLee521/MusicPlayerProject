@@ -89,13 +89,21 @@ public class SelectSongActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (mUriArrayLIst.size() > 0) {
+
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            if(mRealm.where(MusicFile.class).count() > 0) {
+                                mRealm.where(MusicFile.class).findAll().deleteAllFromRealm();
+                            }
+                        }
+                    });
+
                     // TODO 선택된 파일을 Realm 에 저장
                     for (Uri uri : mUriArrayLIst) {
                         getSongToPlaylist(uri);
                     }
 
-//                    mRealm.where(MusicFile.class)
-//                            .count();
 
                     Toast.makeText(SelectSongActivity.this, "저장된 음악의 갯수" +
                             mRealm.where(MusicFile.class).count(), Toast.LENGTH_SHORT).show();
