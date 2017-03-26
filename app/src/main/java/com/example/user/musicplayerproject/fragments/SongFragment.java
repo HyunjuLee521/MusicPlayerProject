@@ -10,10 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.example.user.musicplayerproject.MusicFile;
 import com.example.user.musicplayerproject.R;
 import com.example.user.musicplayerproject.activities.SelectSongActivity;
+import com.example.user.musicplayerproject.adapters.ListViewAdapter;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 /**
@@ -26,6 +29,7 @@ public class SongFragment extends Fragment implements View.OnClickListener {
     public static final int PICK_AUDIO_REQUEST_CODE = 1000;
     public static final int MOVE_SELECTSONG_REQUEST_CODE = 1000;
     private Realm mRealm;
+    private ListViewAdapter mAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,12 @@ public class SongFragment extends Fragment implements View.OnClickListener {
         Button pickButton = (Button) view.findViewById(R.id.pick_button);
         pickButton.setOnClickListener(this);
 
+
+        // OrderedRealmCollection <MusicFile> 생성
+        RealmResults<MusicFile> musicFileRealmResults = mRealm.where(MusicFile.class).findAll();
+
+        mAdapter= new ListViewAdapter(musicFileRealmResults);
+        listView.setAdapter(mAdapter);
 
 
     }

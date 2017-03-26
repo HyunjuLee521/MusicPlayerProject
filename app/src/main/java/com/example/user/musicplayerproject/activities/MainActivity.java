@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
 
     }
-
 
     private class PagerAdapter extends FragmentPagerAdapter {
 
