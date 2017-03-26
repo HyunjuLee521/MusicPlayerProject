@@ -1,5 +1,6 @@
 package com.example.user.musicplayerproject.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -58,5 +59,11 @@ public class MainActivity extends AppCompatActivity {
             return 2;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mSongFragment.scrollDown();
     }
 }

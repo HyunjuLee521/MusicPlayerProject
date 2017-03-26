@@ -2,10 +2,7 @@ package com.example.user.musicplayerproject.fragments;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -15,19 +12,14 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.musicplayerproject.CursorRecyclerViewAdapter;
-import com.example.user.musicplayerproject.MusicFile;
 import com.example.user.musicplayerproject.R;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -39,7 +31,6 @@ import io.realm.Realm;
 public class SelectSongBySongFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private Button mGetPlaylistButton;
     private Realm mRealm;
     private ArrayList<Uri> mUriArrayLIst;
 
@@ -61,7 +52,6 @@ public class SelectSongBySongFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mGetPlaylistButton = (Button) view.findViewById(R.id.get_playlist_button);
 
 
         // ArrayList 초기화
@@ -104,42 +94,6 @@ public class SelectSongBySongFragment extends Fragment {
         mRecyclerView.setAdapter(adapter);
 
 
-        // "플레이리스트로 가져오기" 버튼 클릭시
-        mGetPlaylistButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mUriArrayLIst.size() > 0) {
-
-//                    mRealm.executeTransaction(new Realm.Transaction() {
-//                        @Override
-//                        public void execute(Realm realm) {
-//                            if (mRealm.where(MusicFile.class).count() > 0) {
-//                                mRealm.where(MusicFile.class).findAll().deleteAllFromRealm();
-//                            }
-//                        }
-//                    });
-
-                    // TODO 선택된 파일을 Realm 에 저장
-                    for (Uri uri : mUriArrayLIst) {
-                        getSongToPlaylist(uri);
-                    }
-
-                    Toast.makeText(getActivity(), mUriArrayLIst.size() + " 개의 음악을 플레이리스트에 추가합니다"
-                            , Toast.LENGTH_SHORT).show();
-
-                    // TODO 액티비티 닫기
-                    Intent intent = new Intent();
-
-                    getActivity().finish();
-
-                } else {
-                    Toast.makeText(getActivity(), "선택된 음악이 없습니다.", Toast.LENGTH_SHORT).show();
-                }
-
-
-
-            }
-        });
     }
 
     @Override
@@ -147,62 +101,6 @@ public class SelectSongBySongFragment extends Fragment {
         super.onDestroy();
         // 렘 닫기
         mRealm.close();
-    }
-
-
-    // uri값 받아와서
-    // Realm 테이블 MusicFile에 저장
-    public void getSongToPlaylist(Uri uri) {
-
-        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//        retriever.setDataSource(MyUtils.getRealPath(this, uri));
-        retriever.setDataSource(getContext(), uri);
-
-        // 미디어 정보
-        final String mUri = uri.toString();
-        final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-        final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
-        final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
-
-        // 오디오 앨범 자켓 이미지
-        // bitmap -> String으로 변환하여 저장
-        final String image;
-
-//             오디오 앨범 자켓 이미지
-        byte albumImage[] = retriever.getEmbeddedPicture();
-        if (null != albumImage) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
-            // TODO 비트맵 -> String으로 변환
-            image = BitMapToString(bitmap);
-        } else {
-            image = "nothing";
-        }
-
-
-        // TODO 렘에 저장
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-
-                MusicFile musicFile = mRealm.createObject(MusicFile.class);
-
-                musicFile.setUri(mUri);
-                musicFile.setArtist(artist);
-                musicFile.setTitle(title);
-                musicFile.setImage(image);
-                musicFile.setDuration(duration);
-
-
-            }
-        });
-
-
-        if (mRealm.where(MusicFile.class).count() > 0) {
-            MusicFile musicFile = mRealm.where(MusicFile.class).findFirst();
-//            Toast.makeText(this, "MusicFile에 들어간 파일 : " + musicFile.toString(), Toast.LENGTH_SHORT).show();
-        }
-
-
     }
 
 
@@ -271,26 +169,10 @@ public class SelectSongBySongFragment extends Fragment {
         }
     }
 
-
-    /**
-     * @param bitmap
-     * @return converting bitmap and return a string
-     */
-    public static String BitMapToString(Bitmap bitmap) {
-        String temp;
-        if (bitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            temp = Base64.encodeToString(b, Base64.DEFAULT);
-
-        } else {
-            temp = "nothing";
-        }
-
-        return temp;
+    // mUriArrayList return하는 메서드
+    public ArrayList<Uri> getSelectedSongUriArrayList() {
+        return mUriArrayLIst;
     }
-
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

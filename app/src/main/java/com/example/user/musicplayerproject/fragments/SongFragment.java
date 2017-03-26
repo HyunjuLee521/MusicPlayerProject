@@ -29,7 +29,8 @@ public class SongFragment extends Fragment implements View.OnClickListener {
     public static final int PICK_AUDIO_REQUEST_CODE = 1000;
     public static final int MOVE_SELECTSONG_REQUEST_CODE = 1000;
     private Realm mRealm;
-    private ListViewAdapter mAdapter;
+    private ListViewAdapter adapter;
+    private ListView listView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,7 +58,9 @@ public class SongFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         // TODO ListView - RealmAdapter만들어 꽂기
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        listView = (ListView) view.findViewById(R.id.list_view);
+        listView.requestFocusFromTouch();
+
 
         Button pickButton = (Button) view.findViewById(R.id.pick_button);
         pickButton.setOnClickListener(this);
@@ -66,8 +69,8 @@ public class SongFragment extends Fragment implements View.OnClickListener {
         // OrderedRealmCollection <MusicFile> 생성
         RealmResults<MusicFile> musicFileRealmResults = mRealm.where(MusicFile.class).findAll();
 
-        mAdapter= new ListViewAdapter(musicFileRealmResults);
-        listView.setAdapter(mAdapter);
+        adapter = new ListViewAdapter(musicFileRealmResults);
+        listView.setAdapter(adapter);
 
 
     }
@@ -75,10 +78,11 @@ public class SongFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
+            // "가져오기" 버튼 눌렀을 때
             case R.id.pick_button:
                 Intent intent = new Intent(getContext(), SelectSongActivity.class);
+                // TODO 이벤트 버스로 바꿔야 하나?
                 // 주거니 받거니
                 getActivity().startActivityForResult(intent, MOVE_SELECTSONG_REQUEST_CODE);
                 getActivity().overridePendingTransition(0, 0);
@@ -87,11 +91,12 @@ public class SongFragment extends Fragment implements View.OnClickListener {
             default:
                 break;
 
-
         }
-
     }
 
-
+    public void scrollDown () {
+        adapter.notifyDataSetChanged();
+        listView.setSelection(listView.getCount());
+    }
 
 }
