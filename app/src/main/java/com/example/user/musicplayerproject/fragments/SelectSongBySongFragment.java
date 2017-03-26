@@ -135,6 +135,9 @@ public class SelectSongBySongFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "선택된 음악이 없습니다.", Toast.LENGTH_SHORT).show();
                 }
+
+
+
             }
         });
     }

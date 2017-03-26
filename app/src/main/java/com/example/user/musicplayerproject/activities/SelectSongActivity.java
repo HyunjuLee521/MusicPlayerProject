@@ -23,11 +23,14 @@ public class SelectSongActivity extends AppCompatActivity {
         mSelectSongBySongFragment = new SelectSongBySongFragment();
 
 
-
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+
+//        viewPager.getCurrentItem()
+
+
     }
 
 
@@ -53,7 +56,6 @@ public class SelectSongActivity extends AppCompatActivity {
         }
 
     }
-
 
 
 }

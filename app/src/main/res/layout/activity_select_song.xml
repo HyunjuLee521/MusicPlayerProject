@@ -12,6 +12,13 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <fragment
+        android:id="@+id/send_song_frag"
+        android:name="com.example.user.musicplayerproject.fragments.SendSongToPlaylistFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout="@layout/send_song_to_playlist_fragment">
+    </fragment>
 
 
 </LinearLayout>
