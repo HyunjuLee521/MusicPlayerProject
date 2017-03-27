@@ -8,6 +8,7 @@ import io.realm.RealmObject;
 
 public class MusicFile extends RealmObject{
 
+    int id;
     String uri;
     String title;
     String artist;
@@ -15,6 +16,13 @@ public class MusicFile extends RealmObject{
     String image;
 
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getDuration() {
         return duration;
@@ -60,7 +68,8 @@ public class MusicFile extends RealmObject{
     @Override
     public String toString() {
         return "MusicFile{" +
-                "uri='" + uri + '\'' +
+                "id=" + id +
+                ", uri='" + uri + '\'' +
                 ", title='" + title + '\'' +
                 ", artist='" + artist + '\'' +
                 ", duration='" + duration + '\'' +

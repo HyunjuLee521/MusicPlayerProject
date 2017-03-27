@@ -21,7 +21,6 @@ import io.realm.RealmBaseAdapter;
  * Created by USER on 2017-03-25.
  */
 
-//TODO Realm 어댑터 구현
 public class ListViewAdapter extends RealmBaseAdapter<MusicFile> implements ListAdapter{
 
 
@@ -63,10 +62,13 @@ public class ListViewAdapter extends RealmBaseAdapter<MusicFile> implements List
             } else {
                 viewHolder.albumImageview.setImageBitmap(StringToBitMap(item.getImage()));
             }
+
+
         }
 
         return convertView;
     }
+
 
 
     /**

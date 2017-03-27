@@ -73,7 +73,6 @@ public class SelectSongActivity extends AppCompatActivity {
 //                        }
 //                    });
 
-                    // TODO 선택된 파일을 Realm 에 저장
                     for (Uri uri : selectedSongUriList) {
                         getSongToPlaylist(uri);
                     }
@@ -82,7 +81,6 @@ public class SelectSongActivity extends AppCompatActivity {
                             , Toast.LENGTH_SHORT).show();
 
 
-                    // TODO 인텐트 다시 보내기
                     Intent intent = new Intent();
                     setResult(RESULT_OK, intent);
                     finish();
@@ -150,14 +148,15 @@ public class SelectSongActivity extends AppCompatActivity {
         byte albumImage[] = retriever.getEmbeddedPicture();
         if (null != albumImage) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
-            // TODO 비트맵 -> String으로 변환
             image = BitMapToString(bitmap);
         } else {
             image = "nothing";
         }
 
 
-        // TODO 렘에 저장
+
+
+        // 렘에 저장
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -169,6 +168,18 @@ public class SelectSongActivity extends AppCompatActivity {
                 musicFile.setTitle(title);
                 musicFile.setImage(image);
                 musicFile.setDuration(duration);
+
+
+                // TODO id값 부여
+                Number currentIdNum = mRealm.where(MusicFile.class).max("id");
+                int nextId;
+                if(currentIdNum == null) {
+                    nextId = 1;
+                } else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+                musicFile.setId(nextId);
+                mRealm.insertOrUpdate(musicFile); // using insert API
 
 
             }
