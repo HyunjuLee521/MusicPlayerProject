@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.musicplayerproject.activities.MainActivity">
+    tools:context="com.hj.user.musicplayerproject.activities.MainActivity">
 
 
     <android.support.v4.view.ViewPager
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/music_controller_frag"
-        android:name="com.example.user.musicplayerproject.fragments.MusicControllerFragment"
+        android:name="com.hj.user.musicplayerproject.fragments.MusicControllerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/music_controller" />

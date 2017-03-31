@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.user.musicplayerproject.activities.SelectSongActivity">
+    tools:context="com.hj.user.musicplayerproject.activities.SelectSongActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/send_song_frag"
-        android:name="com.example.user.musicplayerproject.fragments.SendSongToPlaylistFragment"
+        android:name="com.hj.user.musicplayerproject.fragments.SendSongToPlaylistFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/send_song_to_playlist_fragment">
