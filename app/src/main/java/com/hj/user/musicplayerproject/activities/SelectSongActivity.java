@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.hj.user.musicplayerproject.MusicFile;
+import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.fragments.SelectSongBySongFragment;
 

@@ -12,10 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.hj.user.musicplayerproject.MusicFile;
+import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.activities.SelectSongActivity;
 import com.hj.user.musicplayerproject.adapters.ListViewAdapter;
+import com.hj.user.musicplayerproject.services.MusicService;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -86,6 +87,12 @@ public class SongFragment extends Fragment implements View.OnClickListener {
                 // 해당 아이템의 아이디 토스트로 띄우기
                 int temp = mRealm.where(MusicFile.class).equalTo("id", position + 1).findFirst().getId();
                 Toast.makeText(getContext(), temp + "", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getActivity(), MusicService.class);
+                intent.putExtra("id", temp);
+                intent.setAction(MusicService.ACTION_PLAY);
+                getActivity().startService(intent);
+
             }
         });
 

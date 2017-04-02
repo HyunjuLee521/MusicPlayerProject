@@ -1,4 +1,4 @@
-package com.hj.user.musicplayerproject;
+package com.hj.user.musicplayerproject.models;
 
 import io.realm.RealmObject;
 
