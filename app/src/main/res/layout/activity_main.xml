@@ -16,9 +16,9 @@
 
     <fragment
         android:id="@+id/music_controller_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.MusicControllerFragment"
+        android:name="com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout="@layout/music_controller" />
+        tools:layout="@layout/music_controller_fragment" />
 
 </LinearLayout>

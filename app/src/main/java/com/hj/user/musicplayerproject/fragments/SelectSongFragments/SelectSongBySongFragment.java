@@ -1,4 +1,4 @@
-package com.hj.user.musicplayerproject.fragments;
+package com.hj.user.musicplayerproject.fragments.SelectSongFragments;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -51,7 +51,7 @@ public class SelectSongBySongFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.selectsongbysong_recyclerview);
 
 
         // ArrayList 초기화

@@ -1,4 +1,4 @@
-package com.hj.user.musicplayerproject.fragments;
+package com.hj.user.musicplayerproject.fragments.MainFragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +13,12 @@ import com.hj.user.musicplayerproject.R;
  * Created by USER on 2017-03-22.
  */
 
-public class MusicControllerFragment extends Fragment {
+public class PlayerFragment extends Fragment {
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.music_controller, container, false);
 
+        return inflater.inflate(R.layout.player_fragment, container, false);
     }
 }

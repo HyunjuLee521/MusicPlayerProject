@@ -1,4 +1,4 @@
-package com.hj.user.musicplayerproject.fragments;
+package com.hj.user.musicplayerproject.fragments.MainFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import io.realm.RealmResults;
  * Created by USER on 2017-03-22.
  */
 
-public class SongFragment extends Fragment implements View.OnClickListener {
+public class PlaylistFragment extends Fragment implements View.OnClickListener {
 
 
     public static final int PICK_AUDIO_REQUEST_CODE = 1000;

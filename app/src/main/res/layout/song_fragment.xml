@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     >
 
-
+    <!-- TODO 리스트뷰가 아니라 리사이클러뷰로 바꾸기 -->
    <ListView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"

@@ -16,9 +16,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment;
 import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.R;
-import com.hj.user.musicplayerproject.fragments.SelectSongBySongFragment;
+import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ import io.realm.Realm;
 public class SelectSongActivity extends AppCompatActivity {
 
     private SelectSongBySongFragment mSelectSongBySongFragment;
+    private SelectSongByArtistFragment mSelectSongByArtistFragment;
+
     private Realm mRealm;
     private ArrayList<Uri> selectedSongUriList;
 
@@ -41,6 +44,7 @@ public class SelectSongActivity extends AppCompatActivity {
 
         // 프래그먼트 초기화
         mSelectSongBySongFragment = new SelectSongBySongFragment();
+        mSelectSongByArtistFragment = new SelectSongByArtistFragment();
 
         // 뷰페이저에 어댑터 꽂기
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -57,6 +61,11 @@ public class SelectSongActivity extends AppCompatActivity {
                     case 0:
                         selectedSongUriList = mSelectSongBySongFragment.getSelectedSongUriArrayList();
                         break;
+
+
+                    case 1:
+                        break;
+
 
                     default:
                         break;
@@ -106,13 +115,16 @@ public class SelectSongActivity extends AppCompatActivity {
                 case 0:
                     return mSelectSongBySongFragment;
 
+                case 1:
+                    return mSelectSongByArtistFragment;
+
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            return 1;
+            return 2;
         }
 
     }

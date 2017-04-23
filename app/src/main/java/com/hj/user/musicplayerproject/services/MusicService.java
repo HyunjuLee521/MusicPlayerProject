@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
@@ -21,7 +22,8 @@ import io.realm.Realm;
  */
 
 public class MusicService extends Service {
-    // SongFragment
+
+    // PlaylistFragment
     // 리스트뷰에서 아이템(곡) 클릭
     public static String ACTION_PLAY = "play";
 
@@ -39,12 +41,53 @@ public class MusicService extends Service {
 
     private Realm mRealm;
 
+    private AudioManager mAudioManager;
+    private AudioManager.OnAudioFocusChangeListener mAudioFocusChangeListener;
+
+    private boolean mAudioFocusGranted;
+    private int mAudioFocusState;
 
     @Override
     public void onCreate() {
         super.onCreate();
         // 렘 초기화
         mRealm = Realm.getDefaultInstance();
+
+        mAudioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
+        mAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
+            @Override
+            public void onAudioFocusChange(int focusChange) {
+
+                Toast.makeText(MusicService.this, "포커스가 변겨오디었다", Toast.LENGTH_SHORT).show();
+
+                switch (focusChange) {
+                    case AudioManager.AUDIOFOCUS_GAIN:
+                        Toast.makeText(MusicService.this, "포커스체인지 얻었다", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case AudioManager.AUDIOFOCUS_LOSS:
+                        mMediaPlayer.stop();
+                        mMediaPlayer.release();
+                        mMediaPlayer = null;
+                        Toast.makeText(MusicService.this, "포커스를 잃었다", Toast.LENGTH_SHORT).show();
+                        break;
+
+
+                    // TODO 포커스 잠시 잃었을 때, 미디어플레이어 종료하지 않고 정지
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                        mMediaPlayer.pause();
+                        break;
+
+                    case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                        mMediaPlayer.setVolume(0.1f, 0.1f);
+                        break;
+
+
+                }
+
+
+            }
+        };
     }
 
     @Override
@@ -56,14 +99,49 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = intent.getAction();
-        if (ACTION_PLAY.equals(action)) {
-            playMusicList(intent.getIntExtra("id", -1));
-        } else if (ACTION_RESUME.equals(action)) {
+        if (intent != null) {
+            String action = intent.getAction();
+            if (ACTION_PLAY.equals(action)) {
+                requestAudioFocus();
+                playMusicList(intent.getIntExtra("id", -1));
+            } else if (ACTION_RESUME.equals(action)) {
 //            clickResumeButton();
+            }
         }
         return START_STICKY;
     }
+
+    private void requestAudioFocus() {
+        int result = mAudioManager.requestAudioFocus(mAudioFocusChangeListener,
+                AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN);
+
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            mAudioFocusGranted = true;
+            mAudioFocusState = AudioManager.AUDIOFOCUS_GAIN;
+//            Toast.makeText(this, "포커스를 요청하여 얻었다", Toast.LENGTH_SHORT).show();
+        } else if (result == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+            mAudioFocusGranted = false;
+        }
+    }
+
+    /*
+    . AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+2.
+3.  int result = am.requestAudioFocus(mOnAudioFocusChangeListener,
+4.    // Hint: the music stream.
+5.    AudioManager.STREAM_MUSIC,
+6.    // Request permanent focus.
+7.    AudioManager.AUDIOFOCUS_GAIN);
+8.  if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+9.    mState.audioFocusGranted = true;
+10. } else if (result == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+11.   mState.audioFocusGranted = false;
+12. }
+
+
+     */
+
 
     private void playMusicList(int id) {
 
@@ -127,9 +205,16 @@ public class MusicService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return mBinder;
     }
 
+    private final IBinder mBinder = new LocalBinder();
 
+    public class LocalBinder extends Binder {
+        public MusicService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return MusicService.this;
+        }
+    }
 
 }

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#d9a9a9"
+    android:orientation="horizontal"
+    android:padding="4dp">
+
+    <LinearLayout
+        android:id="@+id/tofolder_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/tofolder_imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_folder_open_black_24dp" />
+
+        <TextView
+            android:id="@+id/tofolder_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="담기" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/up_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/up_imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_upward_black_24dp" />
+
+
+        <TextView
+            android:id="@+id/up_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="위로" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/down_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/down_imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_downward_black_24dp" />
+
+        <TextView
+            android:id="@+id/down_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="아래로" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/delete_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/delete_imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_clear_black_24dp" />
+
+        <TextView
+            android:id="@+id/delete_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="삭제" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/cancel_linearlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/cancel_imageview"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_keyboard_return_black_24dp" />
+
+        <TextView
+            android:id="@+id/cancel_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="선택취소" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

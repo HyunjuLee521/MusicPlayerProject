@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/send_song_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.SendSongToPlaylistFragment"
+        android:name="com.hj.user.musicplayerproject.fragments.SelectSongFragments.SendSongToPlaylistFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/send_song_to_playlist_fragment">

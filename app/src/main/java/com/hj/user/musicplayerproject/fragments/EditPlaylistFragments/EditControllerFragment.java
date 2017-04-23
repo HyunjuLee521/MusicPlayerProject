@@ -1,4 +1,4 @@
-package com.hj.user.musicplayerproject.fragments;
+package com.hj.user.musicplayerproject.fragments.EditPlaylistFragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,16 +10,20 @@ import android.view.ViewGroup;
 import com.hj.user.musicplayerproject.R;
 
 /**
- * Created by USER on 2017-03-26.
+ * Created by USER on 2017-04-22.
  */
 
-public class SendSongToPlaylistFragment extends Fragment {
+public class EditControllerFragment extends Fragment {
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.send_song_to_playlist_fragment, container, false);
-    }
+        return inflater.inflate(R.layout.edit_controller_fragment, container, false);
 
+    }
 }
