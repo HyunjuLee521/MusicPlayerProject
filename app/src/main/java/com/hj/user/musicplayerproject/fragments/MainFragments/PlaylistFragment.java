@@ -82,7 +82,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // TODO 리스트뷰 아이템 클릭시 -> 해당 음악 아이템 서비스로 넘기기
+                // 리스트뷰 아이템 클릭시 -> 해당 음악 아이템 서비스로 넘기기
                 //
                 // 해당 아이템의 아이디 토스트로 띄우기
                 int temp = mRealm.where(MusicFile.class).equalTo("id", position + 1).findFirst().getId();

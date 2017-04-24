@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.hj.user.musicplayerproject.models.MusicFile;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 
 import io.realm.Realm;
@@ -31,9 +33,9 @@ public class MusicService extends Service {
     // 가운데 버튼(재생, 일시중지) 클릭
     public static String ACTION_RESUME = "resume";
     // 왼쪽 버튼(<< : 이전곡) 클릭
-    public static String ACTION_BEFORE = "before";
+    public static String ACTION_PREV = "prev";
     // 오른쪽 버튼(>> : 다음곡) 클릭
-    public static String ACTION_AFTER = "after";
+    public static String ACTION_NEXT = "next";
 
 
     private MediaPlayer mMediaPlayer;
@@ -47,6 +49,9 @@ public class MusicService extends Service {
     private boolean mAudioFocusGranted;
     private int mAudioFocusState;
 
+    private int currentId;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,7 +63,7 @@ public class MusicService extends Service {
             @Override
             public void onAudioFocusChange(int focusChange) {
 
-                Toast.makeText(MusicService.this, "포커스가 변겨오디었다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MusicService.this, "포커스가 변경되었다", Toast.LENGTH_SHORT).show();
 
                 switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_GAIN:
@@ -105,7 +110,11 @@ public class MusicService extends Service {
                 requestAudioFocus();
                 playMusicList(intent.getIntExtra("id", -1));
             } else if (ACTION_RESUME.equals(action)) {
-//            clickResumeButton();
+                clickResumeButton();
+            } else if (ACTION_PREV.equals(action)) {
+                prevMusic();
+            } else if (ACTION_NEXT.equals(action)) {
+                nextMusic();
             }
         }
         return START_STICKY;
@@ -125,25 +134,34 @@ public class MusicService extends Service {
         }
     }
 
-    /*
-    . AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-2.
-3.  int result = am.requestAudioFocus(mOnAudioFocusChangeListener,
-4.    // Hint: the music stream.
-5.    AudioManager.STREAM_MUSIC,
-6.    // Request permanent focus.
-7.    AudioManager.AUDIOFOCUS_GAIN);
-8.  if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-9.    mState.audioFocusGranted = true;
-10. } else if (result == AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
-11.   mState.audioFocusGranted = false;
-12. }
 
+    private void clickResumeButton() {
+        if (isPlaying()) {
+            mMediaPlayer.pause();
+        } else {
+            mMediaPlayer.start();
+        }
 
-     */
+        /**
+         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateResumeImageview(Boolean)}
+         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI(Boolean)}
+         */
+        EventBus.getDefault().post(isPlaying());
+    }
 
+    public MediaMetadataRetriever getMetaDataRetriever() {
+        return mRetriever;
+    }
+
+    public boolean isPlaying() {
+        if (mMediaPlayer != null) {
+            return mMediaPlayer.isPlaying();
+        }
+        return false;
+    }
 
     private void playMusicList(int id) {
+        currentId = id;
 
         if (id == -1) {
             Toast.makeText(this, "id값이 -1 : SongFragment에서 id값 전달받지 못했음", Toast.LENGTH_SHORT).show();
@@ -153,6 +171,7 @@ public class MusicService extends Service {
             final int nextId = id + 1;
 
             try {
+
                 // 현재 재생중인 정보
                 mRetriever = new MediaMetadataRetriever();
                 mRetriever.setDataSource(this, uri);
@@ -172,10 +191,17 @@ public class MusicService extends Service {
                         mp.start();
 
 
-//                    /**
-//                     * {@link com.example.myapplication.fragments.MusicControllerFragment#updateUI(Boolean)}
-//                     */
-//                    EventBus.getDefault().post(isPlaying());
+                        /**
+                         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateResumeImageview(Boolean)}
+                         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI(Boolean)}
+                         */
+                        EventBus.getDefault().post(isPlaying());
+
+
+//                        /**
+//                         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateAlbumImage(Boolean)}
+//                         */
+//                        EventBus.getDefault().post(isPlaying());
 
                     }
                 });
@@ -199,6 +225,24 @@ public class MusicService extends Service {
         }
 
 
+    }
+
+
+    public void nextMusic() {
+        currentId++;
+
+        if (currentId > mRealm.where(MusicFile.class).count()) {
+            currentId = 1;
+        }
+        playMusicList(currentId);
+    }
+
+    public void prevMusic() {
+        currentId--;
+        if (currentId < 1) {
+            currentId = (int) mRealm.where(MusicFile.class).count();
+        }
+        playMusicList(currentId);
     }
 
 
