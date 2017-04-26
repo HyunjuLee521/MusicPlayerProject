@@ -58,7 +58,8 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:orientation="vertical">
@@ -68,36 +69,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="title"
-                    android:textSize="32sp" />
+                    android:textSize="28sp" />
 
                 <TextView
-                    android:id="@+id/artist_textview"
+                    android:id="@+id/artist_name_textview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="artist"
-                    android:textSize="24sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:layout_weight="1"
-                android:gravity="end">
+                android:layout_gravity="end">
 
                 <ImageView
                     android:id="@+id/repeat_imageview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/ic_repeat_black_24dp" />
 
                 <ImageView
                     android:id="@+id/heart_imageview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_favorite_border_black_24dp" />
 
             </LinearLayout>

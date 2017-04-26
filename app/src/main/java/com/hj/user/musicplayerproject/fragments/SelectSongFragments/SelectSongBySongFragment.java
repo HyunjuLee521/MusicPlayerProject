@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.hj.user.musicplayerproject.CursorRecyclerViewAdapter;
 import com.hj.user.musicplayerproject.R;
+import com.hj.user.musicplayerproject.models.ArtistName;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,7 @@ public class SelectSongBySongFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Realm mRealm;
     private ArrayList<Uri> mUriArrayLIst;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,6 +111,7 @@ public class SelectSongBySongFragment extends Fragment {
     // 어댑터
     public static class SongRecyclerAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
 
+        private ArrayList<ArtistName> mArtistNameData;
         private Context mContext;
 
         // 온아이템클릭시 -> 콜백 위한 처리들
@@ -127,6 +132,8 @@ public class SelectSongBySongFragment extends Fragment {
         public SongRecyclerAdapter(Context context, Cursor cursor) {
             super(context, cursor);
             mContext = context;
+
+            mArtistNameData = new ArrayList<ArtistName>();
         }
 
         @Override
@@ -134,8 +141,10 @@ public class SelectSongBySongFragment extends Fragment {
             return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false));
         }
 
+
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor) {
+
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 final Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cursor.getLong(
@@ -165,6 +174,85 @@ public class SelectSongBySongFragment extends Fragment {
 
             viewHolder.titleTextView.setText(title);
             viewHolder.artistTextView.setText(artist);
+
+
+            // 아티스트 뽑기
+            boolean isDuplicated = false;
+            for (ArtistName artistName : mArtistNameData) {
+                if (artistName.getName().equals(artist)) {
+                    artistName.setCnt(artistName.getCnt() + 1);
+                    isDuplicated = true;
+//                    Toast.makeText(mContext, "data갯수 : " + mArtistNameData.size() + " /중복된 아티스트 " + artistName.getName() + "에 넣는다" + artistName.getCnt(), Toast.LENGTH_SHORT).show();
+                    break;
+                }
+            }
+
+            if (!isDuplicated) {
+                mArtistNameData.add(new ArtistName(artist, 1));
+//                Toast.makeText(mContext, "data갯수 : " + mArtistNameData.size() + " /새로운 아티스트 " + artist + "에 cnt1 넣는다", Toast.LENGTH_SHORT).show();
+            }
+
+
+            // TODO Realm으로 뽑기
+//            Realm realm = Realm.getDefaultInstance();
+//
+//            // 렘에 아티스트 이름 저장
+//            if (realm.where(ArtistFile.class).equalTo("artistName", artist).count() > 0) {
+//                // 기존에 저장되어있던 artist라면 , count + 1  (update)
+//
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//                        ArtistFile mArtist = realm.where(ArtistFile.class)
+//                                .equalTo("artistName", artist)
+//                                .findFirst();
+//
+//                        mArtist.setCount(mArtist.getCount() + 1);
+//                    }
+//                });
+//
+//            } else {
+//                // 처음 나온 artist라면 , id값 부여하고 count = 1로 하여 렘에 저장
+//
+//                realm.executeTransaction(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//
+//                        ArtistFile artistFile = realm.createObject(ArtistFile.class);
+//                        artistFile.setArtistName(artist);
+//                        artistFile.setCount(1);
+//
+//                        // TODO id값 부여
+//                        Number currentIdNum = realm.where(ArtistFile.class).max("id");
+//                        int nextId;
+//                        if (currentIdNum == null) {
+//                            nextId = 1;
+//                        } else {
+//                            nextId = currentIdNum.intValue() + 1;
+//                        }
+//                        artistFile.setId(nextId);
+//
+//                        realm.insertOrUpdate(artistFile); // using insert API
+//
+//                    }
+//                });
+//            }
+//
+//
+//            realm.close();
+
+
+//            viewHolder.artistTextView.setText(artist);
+
+            if (cursor.isLast()) {
+//                Toast.makeText(mContext, "마지막 cursor에 저장되어있는 data갯수 : " + mArtistNameData.size(), Toast.LENGTH_SHORT).show();
+                /**
+                 * {@link com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment#getArtistNameList(ArrayList<ArtistName>)}
+                 */
+                EventBus.getDefault().post(mArtistNameData);
+
+            }
+
 
         }
     }

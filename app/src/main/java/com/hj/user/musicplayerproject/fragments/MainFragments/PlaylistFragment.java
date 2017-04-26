@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.activities.SelectSongActivity;
-import com.hj.user.musicplayerproject.adapters.ListViewAdapter;
+import com.hj.user.musicplayerproject.adapters.PlaylistListViewAdapter;
 import com.hj.user.musicplayerproject.services.MusicService;
 
 import io.realm.Realm;
@@ -32,7 +32,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     public static final int PICK_AUDIO_REQUEST_CODE = 1000;
     public static final int MOVE_SELECTSONG_REQUEST_CODE = 1000;
     private Realm mRealm;
-    private ListViewAdapter adapter;
+    private PlaylistListViewAdapter adapter;
     private ListView listView;
 
     @Override
@@ -74,7 +74,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
         // OrderedRealmCollection <MusicFile> 생성
         final RealmResults<MusicFile> musicFileRealmResults = mRealm.where(MusicFile.class).findAll();
 
-        adapter = new ListViewAdapter(musicFileRealmResults);
+        adapter = new PlaylistListViewAdapter(musicFileRealmResults);
         listView.setAdapter(adapter);
 
 

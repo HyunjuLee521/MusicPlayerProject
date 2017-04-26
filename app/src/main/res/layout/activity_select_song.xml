@@ -6,6 +6,12 @@
     android:orientation="vertical"
     tools:context="com.hj.user.musicplayerproject.activities.SelectSongActivity">
 
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -17,8 +23,7 @@
         android:name="com.hj.user.musicplayerproject.fragments.SelectSongFragments.SendSongToPlaylistFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout="@layout/send_song_to_playlist_fragment">
-    </fragment>
+        tools:layout="@layout/send_song_to_playlist_fragment"></fragment>
 
 
 </LinearLayout>

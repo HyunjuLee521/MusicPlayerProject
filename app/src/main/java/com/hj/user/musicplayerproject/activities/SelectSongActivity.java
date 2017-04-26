@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,15 +17,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment;
-import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.R;
+import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment;
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
+import com.hj.user.musicplayerproject.models.MusicFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+
 
 public class SelectSongActivity extends AppCompatActivity {
 
@@ -33,6 +35,7 @@ public class SelectSongActivity extends AppCompatActivity {
 
     private Realm mRealm;
     private ArrayList<Uri> selectedSongUriList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,17 +50,21 @@ public class SelectSongActivity extends AppCompatActivity {
         mSelectSongByArtistFragment = new SelectSongByArtistFragment();
 
         // 뷰페이저에 어댑터 꽂기
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
+        final ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        PagerAdapter mAdapter = new PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mAdapter);
 
+
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+        mTabLayout.setupWithViewPager(mViewPager);
 
         // "플레이리스트에 추가하기" 버튼 눌렀을 때
         Button sendButton = (Button) findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (viewPager.getCurrentItem()) {
+                switch (mViewPager.getCurrentItem()) {
                     case 0:
                         selectedSongUriList = mSelectSongBySongFragment.getSelectedSongUriArrayList();
                         break;
@@ -127,6 +134,18 @@ public class SelectSongActivity extends AppCompatActivity {
             return 2;
         }
 
+        // 제목 표시
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "전체곡";
+                case 1:
+                    return "아티스트";
+            }
+            return null;
+        }
+
     }
 
 
@@ -159,13 +178,17 @@ public class SelectSongActivity extends AppCompatActivity {
 //             오디오 앨범 자켓 이미지
         byte albumImage[] = retriever.getEmbeddedPicture();
         if (null != albumImage) {
+            // 바이트 -> 비트맵
             Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
+            // 비트맵 -> String
             image = BitMapToString(bitmap);
+
+//            image = new String(albumImage, 0, albumImage.length);
+
+
         } else {
             image = "nothing";
         }
-
-
 
 
         // 렘에 저장
@@ -185,7 +208,7 @@ public class SelectSongActivity extends AppCompatActivity {
                 // TODO id값 부여
                 Number currentIdNum = mRealm.where(MusicFile.class).max("id");
                 int nextId;
-                if(currentIdNum == null) {
+                if (currentIdNum == null) {
                     nextId = 1;
                 } else {
                     nextId = currentIdNum.intValue() + 1;
