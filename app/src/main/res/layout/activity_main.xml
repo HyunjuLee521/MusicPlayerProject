@@ -14,11 +14,12 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <fragment
-        android:id="@+id/music_controller_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment"
+    <FrameLayout
+
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout="@layout/music_controller_fragment" />
+        android:layout_height="wrap_content"/>
+
+
 
 </LinearLayout>

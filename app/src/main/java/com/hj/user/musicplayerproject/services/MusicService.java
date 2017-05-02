@@ -123,11 +123,11 @@ public class MusicService extends Service {
             if (ACTION_PLAY.equals(action)) {
                 requestAudioFocus();
                 playMusicList(intent.getIntExtra("id", -1));
-            } else if (ACTION_RESUME.equals(action)) {
+            } else if (ACTION_RESUME.equals(action) && mMediaPlayer != null) {
                 clickResumeButton();
-            } else if (ACTION_PREV.equals(action)) {
+            } else if (ACTION_PREV.equals(action) && mMediaPlayer != null) {
                 prevMusic();
-            } else if (ACTION_NEXT.equals(action)) {
+            } else if (ACTION_NEXT.equals(action) && mMediaPlayer != null) {
                 nextMusic();
             }
         }
@@ -152,14 +152,17 @@ public class MusicService extends Service {
     private void clickResumeButton() {
         requestAudioFocus();
 
-        if (mMediaPlayer == null) {
-            playMusicList(getIdPref(MusicService.this, "id"));
-        }
+//        if (mMediaPlayer == null) {
+//            playMusicList(getIdPref(MusicService.this, "id"));
+//        }
 
-        if (isPlaying()) {
-            mMediaPlayer.pause();
-        } else {
-            mMediaPlayer.start();
+
+        if (mMediaPlayer != null) {
+            if (isPlaying()) {
+                mMediaPlayer.pause();
+            } else {
+                mMediaPlayer.start();
+            }
         }
 
         /**

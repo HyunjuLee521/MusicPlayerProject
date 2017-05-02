@@ -1,13 +1,12 @@
 package com.hj.user.musicplayerproject.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.models.ArtistName;
 
 import java.util.ArrayList;
@@ -16,73 +15,80 @@ import java.util.ArrayList;
  * Created by USER on 2017-04-25.
  */
 
-public class SelectSongByArtistListVIewAdapter extends BaseAdapter {
-    private ArrayList<ArtistName> mData;
+public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<SelectSongByArtistListVIewAdapter.ViewHolder> {
+
+
     private Context mContext;
+    private ArrayList<ArtistName> mData;
+
+
+    // 온아이템클릭시 -> 콜백 위한 처리들
+    // 1. 보내줄 정보 인터페이스로 정리
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    // 2. 변수로 갖기
+    OnItemClickListener mListener;
+
+    // 3. 변수 외부에서 세팅할수 있게 연결
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
 
     public SelectSongByArtistListVIewAdapter(Context context, ArrayList<ArtistName> data) {
-        mContext = context;
+        mData = new ArrayList<ArtistName>();
         mData = data;
     }
 
     @Override
-    public int getCount() {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false));
+
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+        // 아이템 클릭 시
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemClick(holder.itemView, position);
+                }
+            }
+        });
+
+
+        // 미디어 정보
+        String artist = mData.get(position).getName();
+        int count = mData.get(position).getCnt();
+
+        holder.artistTextView.setText(artist);
+        holder.countTextView.setText(" " + count);
+        holder.countTextView.setTextSize(16);
+
+    }
+
+    @Override
+    public int getItemCount() {
         return mData.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return mData.get(position);
-    }
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+        TextView artistTextView;
+        TextView countTextView;
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        // convertView : 재사용 되는 뷰
-        if (convertView == null) {
-            viewHolder = new ViewHolder();
+        public ViewHolder(View itemView) {
+            super(itemView);
 
-            // 뷰를 새로 만들 때
-            convertView = LayoutInflater.from(mContext)
-                    .inflate(R.layout.artist_list, parent, false);
-
-            // 레이아웃 들고 오기
-            TextView artistNameTextview = (TextView) convertView.findViewById(R.id.artist_name_textview);
-            TextView artistCountTextview = (TextView) convertView.findViewById(R.id.artist_count_textview);
-
-            // 뷰 홀더에 넣는다
-            viewHolder.artistName = artistNameTextview;
-            viewHolder.artistCount = artistCountTextview;
-
-
-            convertView.setTag(viewHolder);
-        } else {
-            // 재사용 할 때
-            viewHolder = (ViewHolder) convertView.getTag();
+            countTextView = (TextView) itemView.findViewById(android.R.id.text2);
+            artistTextView = (TextView) itemView.findViewById(android.R.id.text1);
         }
-
-
-        // 데이터
-        ArtistName data = mData.get(position);
-
-        // 화면에 뿌리기
-        viewHolder.artistName.setText(data.getName());
-        viewHolder.artistCount.setText(data.getCnt() + "곡");
-
-        return convertView;
     }
 
-
-    // findViewById로 가져온 View 들을 보관
-    private static class ViewHolder {
-        TextView artistName;
-        TextView artistCount;
-
-    }
 }

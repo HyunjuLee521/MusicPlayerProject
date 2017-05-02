@@ -6,12 +6,13 @@
     android:orientation="vertical">
 
 
-
-
-    <ListView
-        android:id="@+id/selectsongbyaritst_listview"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/selectsongbyartist_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        android:layout_height="match_parent"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager">
+
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

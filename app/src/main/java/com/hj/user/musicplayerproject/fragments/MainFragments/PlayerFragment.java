@@ -128,8 +128,8 @@ public class PlayerFragment extends Fragment {
             // bitmap -> String으로 변환하여 저장
 //        final String image;
 
-            // TODO 깨져서 나온다
-//             오디오 앨범 자켓 이미지
+
+
             byte albumImage[] = retriever.getEmbeddedPicture();
 
 //        if (null != albumImage) {

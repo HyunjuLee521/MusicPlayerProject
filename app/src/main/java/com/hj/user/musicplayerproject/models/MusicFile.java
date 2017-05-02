@@ -1,20 +1,34 @@
 package com.hj.user.musicplayerproject.models;
 
+
+import java.util.Arrays;
+
 import io.realm.RealmObject;
 
 /**
  * Created by USER on 2017-03-23.
  */
 
-public class MusicFile extends RealmObject{
+public class MusicFile extends RealmObject {
 
     int id;
     String uri;
     String title;
     String artist;
     String duration;
-    String image;
 
+    byte[] image2;
+
+
+
+
+    public byte[] getImage2() {
+        return image2;
+    }
+
+    public void setImage2(byte[] image2) {
+        this.image2 = image2;
+    }
 
     public int getId() {
         return id;
@@ -32,13 +46,6 @@ public class MusicFile extends RealmObject{
         this.duration = duration;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getUri() {
         return uri;
@@ -64,7 +71,6 @@ public class MusicFile extends RealmObject{
         this.artist = artist;
     }
 
-
     @Override
     public String toString() {
         return "MusicFile{" +
@@ -73,7 +79,7 @@ public class MusicFile extends RealmObject{
                 ", title='" + title + '\'' +
                 ", artist='" + artist + '\'' +
                 ", duration='" + duration + '\'' +
-                ", image='" + image + '\'' +
+                ", image2=" + Arrays.toString(image2) +
                 '}';
     }
 }

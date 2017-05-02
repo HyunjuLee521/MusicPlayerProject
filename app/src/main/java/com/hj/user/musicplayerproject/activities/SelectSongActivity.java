@@ -12,7 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,7 +22,6 @@ import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBy
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
 import com.hj.user.musicplayerproject.models.MusicFile;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -35,12 +34,14 @@ public class SelectSongActivity extends AppCompatActivity {
 
     private Realm mRealm;
     private ArrayList<Uri> selectedSongUriList;
+    private ViewPager mViewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_song);
+
 
         // 렘 초기화
         mRealm = Realm.getDefaultInstance();
@@ -50,7 +51,7 @@ public class SelectSongActivity extends AppCompatActivity {
         mSelectSongByArtistFragment = new SelectSongByArtistFragment();
 
         // 뷰페이저에 어댑터 꽂기
-        final ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         PagerAdapter mAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
 
@@ -59,6 +60,8 @@ public class SelectSongActivity extends AppCompatActivity {
 
         mTabLayout.setupWithViewPager(mViewPager);
 
+        selectedSongUriList = new ArrayList<Uri>();
+
         // "플레이리스트에 추가하기" 버튼 눌렀을 때
         Button sendButton = (Button) findViewById(R.id.send_button);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -66,11 +69,11 @@ public class SelectSongActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (mViewPager.getCurrentItem()) {
                     case 0:
-                        selectedSongUriList = mSelectSongBySongFragment.getSelectedSongUriArrayList();
-                        break;
-
-
                     case 1:
+                        addToSelectedSongUriList(mSelectSongBySongFragment.getSelectedSongUriArrayList());
+                        addToSelectedSongUriList(mSelectSongByArtistFragment.getSelectedSongUriArrayList());
+//                        selectedSongUriList = mSelectSongBySongFragment.getSelectedSongUriArrayList();
+                        Log.d("", "onClick: " + selectedSongUriList.toString());
                         break;
 
 
@@ -106,6 +109,30 @@ public class SelectSongActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+    }
+
+    public void addToSelectedSongUriList(ArrayList<Uri> fragmentSongUriList) {
+        for (Uri uri : fragmentSongUriList) {
+            selectedSongUriList.add(uri);
+        }
+    }
+
+
+    // mSelectSongByArtistFragment에서 mAdapter2가 세팅된 상황, 뒤로가기 눌렀을 때 -
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() == 0
+                && mViewPager.getCurrentItem() == 1
+                && mSelectSongByArtistFragment.getAdapterStatus() == 2) {
+
+            Toast.makeText(SelectSongActivity.this, "뒤로가기 테스트", Toast.LENGTH_SHORT).show();
+            mSelectSongByArtistFragment.changeAdapter();
+
+        } else {
+            super.onBackPressed();
+        }
 
     }
 
@@ -173,7 +200,8 @@ public class SelectSongActivity extends AppCompatActivity {
 
         // 오디오 앨범 자켓 이미지
         // bitmap -> String으로 변환하여 저장
-        final String image;
+        final byte[] image2;
+
 
 //             오디오 앨범 자켓 이미지
         byte albumImage[] = retriever.getEmbeddedPicture();
@@ -181,13 +209,11 @@ public class SelectSongActivity extends AppCompatActivity {
             // 바이트 -> 비트맵
             Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
             // 비트맵 -> String
-            image = BitMapToString(bitmap);
-
-//            image = new String(albumImage, 0, albumImage.length);
-
+            image2 = albumImage;
 
         } else {
-            image = "nothing";
+            image2 = null;
+
         }
 
 
@@ -201,8 +227,8 @@ public class SelectSongActivity extends AppCompatActivity {
                 musicFile.setUri(mUri);
                 musicFile.setArtist(artist);
                 musicFile.setTitle(title);
-                musicFile.setImage(image);
                 musicFile.setDuration(duration);
+                musicFile.setImage2(image2);
 
 
                 // TODO id값 부여
@@ -223,30 +249,10 @@ public class SelectSongActivity extends AppCompatActivity {
 
         if (mRealm.where(MusicFile.class).count() > 0) {
             MusicFile musicFile = mRealm.where(MusicFile.class).findFirst();
-//            Toast.makeText(this, "MusicFile에 들어간 파일 : " + musicFile.toString(), Toast.LENGTH_SHORT).show();
         }
 
     }
 
-
-    /**
-     * @param bitmap
-     * @return converting bitmap and return a string
-     */
-    public static String BitMapToString(Bitmap bitmap) {
-        String temp;
-        if (bitmap != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            byte[] b = baos.toByteArray();
-            temp = Base64.encodeToString(b, Base64.DEFAULT);
-
-        } else {
-            temp = "nothing";
-        }
-
-        return temp;
-    }
 
 
 }

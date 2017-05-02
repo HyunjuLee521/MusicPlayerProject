@@ -79,13 +79,13 @@ public class SelectSongBySongFragment extends Fragment {
             public void onItemClick(View view, Uri uri) {
 
                 if (view.getTag() == null || (boolean) view.getTag() == false) {
-                    view.setTag(true);
-                    view.setBackgroundColor(Color.RED);
+//                    view.setTag(true);
+//                    view.setBackgroundColor(Color.RED);
                     mUriArrayLIst.add(uri);
 
                 } else {
-                    view.setTag(false);
-                    view.setBackgroundColor(Color.WHITE);
+//                    view.setTag(false);
+//                    view.setBackgroundColor(Color.WHITE);
                     mUriArrayLIst.remove(uri);
                 }
 
@@ -154,8 +154,25 @@ public class SelectSongBySongFragment extends Fragment {
                 public void onClick(View v) {
                     if (mListener != null) {
                         mListener.onItemClick(viewHolder.itemView, uri);
+
+                        // TODO 색깔 바꾸기 여기서
+
+                        if (v.getTag() == null || (boolean) v.getTag() == false) {
+                            v.setTag(true);
+                            v.setBackgroundColor(Color.RED);
+//                            mUriArrayLIst.add(uri);
+
+                        } else {
+                            v.setTag(false);
+                            v.setBackgroundColor(Color.WHITE);
+//                            mUriArrayLIst.remove(uri);
+                        }
+
+
                     }
                 }
+
+
             });
 
 
@@ -257,10 +274,6 @@ public class SelectSongBySongFragment extends Fragment {
         }
     }
 
-    // mUriArrayList return하는 메서드
-    public ArrayList<Uri> getSelectedSongUriArrayList() {
-        return mUriArrayLIst;
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -274,6 +287,12 @@ public class SelectSongBySongFragment extends Fragment {
             titleTextView = (TextView) itemView.findViewById(android.R.id.text1);
             artistTextView = (TextView) itemView.findViewById(android.R.id.text2);
         }
+    }
+
+
+    // mUriArrayList return하는 메서드
+    public ArrayList<Uri> getSelectedSongUriArrayList() {
+        return mUriArrayLIst;
     }
 
 }

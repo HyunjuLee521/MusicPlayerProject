@@ -42,7 +42,6 @@
 
         <service android:name=".services.MusicService" />
 
-        <activity android:name=".activities.EditPlaylistActivity"></activity>
     </application>
 
 </manifest>
