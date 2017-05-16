@@ -294,8 +294,11 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
 //                int temp = mRealm.where(MusicFile.class).equalTo("id", id).findFirst().getId();
                 Toast.makeText(getContext(), id + "", Toast.LENGTH_SHORT).show();
 
+                // TODO 서비스 Intent 보내기
                 Intent intent = new Intent(getActivity(), MusicService.class);
                 intent.putExtra("id", id);
+                intent.putExtra("uri", uri.toString());
+
                 intent.setAction(MusicService.ACTION_PLAY);
                 getActivity().startService(intent);
 
@@ -303,7 +306,6 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
         });
 
 
-        // TODO 같은 아이템 동시에 두번 클릭하면 죽음
         mAdapter2.setOnItemClickListener(new PlaylistRecyclerviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Uri uri, int position, int id) {

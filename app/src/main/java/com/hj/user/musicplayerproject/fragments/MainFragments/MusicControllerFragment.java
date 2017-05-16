@@ -105,7 +105,6 @@ public class MusicControllerFragment extends Fragment implements View.OnClickLis
     };
 
 
-    // TODO resume 버튼 누를 때 곡이 바뀌지 않아도 changeModeImage가 깜박거리는 현상 수정하기
     @Subscribe
     public void updateResumeImageview(Boolean isPlaying) {
         mResumeImageview.setImageResource(isPlaying ? R.drawable.ic_pause_circle_outline_black_24dp : R.drawable.ic_play_circle_outline_black_24dp);

@@ -1,6 +1,5 @@
 package com.hj.user.musicplayerproject.activities;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -21,6 +20,7 @@ import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment;
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
 import com.hj.user.musicplayerproject.models.MusicFile;
+import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,6 +41,7 @@ public class SelectSongActivity extends AppCompatActivity {
 
     private boolean page1isCreated;
     private Boolean songlistIsCreated;
+
 
 
     @Override
@@ -110,8 +111,18 @@ public class SelectSongActivity extends AppCompatActivity {
                             , Toast.LENGTH_SHORT).show();
 
 
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
+//                    Intent intent = new Intent();
+//                    setResult(RESULT_OK, intent);
+
+
+                    /**
+                     * {@link com.hj.user.musicplayerproject.services.MusicService#getSelectedUriArraylist(com.hj.user.musicplayerproject.utils.MyUtils.sendSongUriEvent)}
+                     */
+
+
+                    MyUtils.sendSongUriEvent event = new MyUtils.sendSongUriEvent(selectedSongUriList);
+                    EventBus.getDefault().post(event);
+
                     finish();
 
                 } else {
@@ -148,6 +159,7 @@ public class SelectSongActivity extends AppCompatActivity {
     }
 
 
+
     @Subscribe
     public void songlistIsCreated(Boolean isCreated) {
         songlistIsCreated = isCreated;
@@ -164,7 +176,6 @@ public class SelectSongActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
-
 
 
     public void addToSelectedSongUriList(ArrayList<Uri> fragmentSongUriList) {
