@@ -22,6 +22,8 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
     private ArrayList<ArtistName> mData;
 
 
+
+
     // 온아이템클릭시 -> 콜백 위한 처리들
     // 1. 보내줄 정보 인터페이스로 정리
     public interface OnItemClickListener {
@@ -40,6 +42,8 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
     public SelectSongByArtistListVIewAdapter(Context context, ArrayList<ArtistName> data) {
         mData = new ArrayList<ArtistName>();
         mData = data;
+
+
     }
 
     @Override
@@ -53,12 +57,12 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
 
         // 아이템 클릭 시
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 if (mListener != null) {
                     mListener.onItemClick(holder.itemView, position);
                 }
+
             }
         });
 
@@ -70,6 +74,7 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
         holder.artistTextView.setText(artist);
         holder.countTextView.setText(" " + count);
         holder.countTextView.setTextSize(16);
+
 
     }
 
@@ -90,5 +95,9 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
             artistTextView = (TextView) itemView.findViewById(android.R.id.text1);
         }
     }
+
+
+
+
 
 }

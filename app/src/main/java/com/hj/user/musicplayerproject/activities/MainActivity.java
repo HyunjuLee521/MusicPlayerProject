@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.fragments.MainFragments.EditControllerFragment;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         mPlayerFragment = new PlayerFragment();
         mPlaylistFragment = new PlaylistFragment();
@@ -55,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container,
                             new MusicControllerFragment()).commit();
+                } else if (position == 1) {
+                    /**
+                     * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#changeMode1Adapter(Integer)}
+                     */
+                    EventBus.getDefault().post(position);
+
+                    mPlaylistFragment.viewPickbutton();
+
                 }
             }
 
@@ -63,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 
@@ -112,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void changeLayoutToEdit(String str) {
-//        Toast.makeText(this, "이벤트버스 수신 값 " + str, Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(this, "도착 값 " + str, Toast.LENGTH_SHORT).show();
 
         if (str.equals("편집")) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container,

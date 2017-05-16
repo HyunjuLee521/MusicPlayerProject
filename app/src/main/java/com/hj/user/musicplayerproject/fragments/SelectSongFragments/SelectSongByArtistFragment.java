@@ -3,7 +3,6 @@ package com.hj.user.musicplayerproject.fragments.SelectSongFragments;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,17 +106,19 @@ public class SelectSongByArtistFragment extends Fragment {
                     // 각 아이템 클릭 시
                     mAdapter2.setOnItemClickListener(new SongRecyclerAdapter.OnItemClickListener() {
                         @Override
-                        public void onItemClick(View view, Uri uri) {
-                            if (view.getTag() == null || (boolean) view.getTag() == false) {
-//                                view.setTag(true);
-//                                view.setBackgroundColor(Color.RED);
-                                mUriArrayLIst.add(uri);
+                        public void onItemClick(View view, Uri uri, int position) {
+//                            if (view.getTag() == null || (boolean) view.getTag() == false) {
+////                                view.setTag(true);
+////                                view.setBackgroundColor(Color.RED);
+//                                mUriArrayLIst.add(uri);
+//
+//                            } else {
+////                                view.setTag(false);
+////                                view.setBackgroundColor(Color.WHITE);
+//                                mUriArrayLIst.remove(uri);
+//                            }
 
-                            } else {
-//                                view.setTag(false);
-//                                view.setBackgroundColor(Color.WHITE);
-                                mUriArrayLIst.remove(uri);
-                            }
+                            mAdapter2.toggleSelection(position, uri);
 
                         }
 
@@ -179,10 +181,14 @@ public class SelectSongByArtistFragment extends Fragment {
         private Context mContext;
         private int mPosition;
 
+        // 선택아이템담을 배열선언
+        private SparseBooleanArray mSelectedItem;
+
+
         // 온아이템클릭시 -> 콜백 위한 처리들
         // 1. 보내줄 정보 인터페이스로 정리
         public interface OnItemClickListener {
-            void onItemClick(View view, Uri uri);
+            void onItemClick(View view, Uri uri, int position);
         }
 
         // 2. 변수로 갖기
@@ -199,18 +205,26 @@ public class SelectSongByArtistFragment extends Fragment {
             mContext = context;
             mPosition = position;
 
+
+            // 배열 초기화
+            this.mSelectedItem = new SparseBooleanArray();
+
+            // ArrayList 초기화
+            mSelectedUriArraylist = new ArrayList<Uri>();
+
         }
 
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_2, parent, false));
+            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.select_song_item, parent, false));
         }
 
 
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor) {
 
+            final int position = cursor.getPosition();
 
             // 아이템 클릭 시
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -220,19 +234,19 @@ public class SelectSongByArtistFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     if (mListener != null) {
-                        mListener.onItemClick(viewHolder.itemView, uri);
-
-                        if (v.getTag() == null || (boolean) v.getTag() == false) {
-                            v.setTag(true);
-                            v.setBackgroundColor(Color.RED);
-//                                mUriArrayLIst.add(uri);
-
-                        } else {
-                            v.setTag(false);
-                            v.setBackgroundColor(Color.WHITE);
-//                                mUriArrayLIst.remove(uri);
-                        }
+                        mListener.onItemClick(viewHolder.itemView, uri, position);
                     }
+
+//                        if (v.getTag() == null || (boolean) v.getTag() == false) {
+//                            v.setTag(true);
+//                            v.setBackgroundColor(Color.RED);
+////                                mUriArrayLIst.add(uri);
+//
+//                        } else {
+//                            v.setTag(false);
+//                            v.setBackgroundColor(Color.WHITE);
+////                                mUriArrayLIst.remove(uri);
+//                        }
                 }
             });
 
@@ -254,6 +268,47 @@ public class SelectSongByArtistFragment extends Fragment {
             viewHolder.artistTextView.setText(artist);
 
 
+            // 선택됐을 때
+            viewHolder.itemView.setActivated(mSelectedItem.get(position, false));
+        }
+
+
+        // 선택된 Uri 배열
+        private ArrayList<Uri> mSelectedUriArraylist;
+
+        public ArrayList<Uri> getSelectedUriList() {
+            return mSelectedUriArraylist;
+        }
+
+
+        // 선택상태 토글
+        public void toggleSelection(int position, Uri uri) {
+
+            if (mSelectedItem.get(position, false)) {
+                // 이미 선택되어 있을 때 -> 선택 해제
+
+                mSelectedItem.delete(position);
+                mSelectedUriArraylist.remove(uri);
+
+//                Toast.makeText(mContext, String.valueOf(position), Toast.LENGTH_SHORT).show();
+            } else {
+                // 선택되어 있지 않을 때 -> 선택
+
+                mSelectedItem.put(position, true);
+                mSelectedUriArraylist.add(uri);
+
+                //  view.setBackgroundColor(Color.YELLOW);
+//                Toast.makeText(mContext, String.valueOf(position), Toast.LENGTH_SHORT).show();
+
+            }
+            notifyItemChanged(position);
+
+        }
+
+        // 모든 항목의 선택상태 지우기
+        public void clearSelection() {
+            mSelectedItem.clear();
+            notifyDataSetChanged();
         }
     }
 
@@ -267,14 +322,14 @@ public class SelectSongByArtistFragment extends Fragment {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            titleTextView = (TextView) itemView.findViewById(android.R.id.text1);
-            artistTextView = (TextView) itemView.findViewById(android.R.id.text2);
+            titleTextView = (TextView) itemView.findViewById(R.id.title_textview);
+            artistTextView = (TextView) itemView.findViewById(R.id.artist_textview);
         }
     }
 
     // mUriArrayList return하는 메서드
     public ArrayList<Uri> getSelectedSongUriArrayList() {
-        return mUriArrayLIst;
+        return mAdapter2.getSelectedUriList();
     }
 
 

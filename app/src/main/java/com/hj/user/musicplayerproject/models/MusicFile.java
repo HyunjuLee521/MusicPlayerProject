@@ -20,7 +20,16 @@ public class MusicFile extends RealmObject {
     byte[] image2;
 
 
+    int position;
 
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     public byte[] getImage2() {
         return image2;
@@ -71,6 +80,7 @@ public class MusicFile extends RealmObject {
         this.artist = artist;
     }
 
+
     @Override
     public String toString() {
         return "MusicFile{" +
@@ -80,6 +90,7 @@ public class MusicFile extends RealmObject {
                 ", artist='" + artist + '\'' +
                 ", duration='" + duration + '\'' +
                 ", image2=" + Arrays.toString(image2) +
+                ", position=" + position +
                 '}';
     }
 }

@@ -19,6 +19,7 @@ import com.hj.user.musicplayerproject.models.MusicFile;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -53,6 +54,8 @@ public class MusicService extends Service {
     private int mAudioFocusState;
 
     private int currentId;
+
+    private ArrayList<Uri> mSongList;
 
 
     @Override
@@ -107,6 +110,13 @@ public class MusicService extends Service {
 
             }
         };
+
+
+        // mSongLIst 초기화
+        mSongList = new ArrayList<Uri>();
+
+        // TODO mSongList에 재생목록 담기
+
     }
 
     @Override
@@ -205,13 +215,26 @@ public class MusicService extends Service {
 
 
     private void playMusicList(int id) {
+        boolean isValidId = true;
+
+        while (mRealm.where(MusicFile.class).equalTo("id", id).count() < 1) {
+            isValidId = false;
+            id++;
+
+            if (mRealm.where(MusicFile.class).equalTo("id", id).count() != 0) {
+                isValidId = true;
+                break;
+            }
+        }
+
         currentId = id;
         setIdPref(MusicService.this, "id", currentId);
 
         if (id == -1) {
             Toast.makeText(this, "id값이 -1 : SongFragment에서 id값 전달받지 못했음", Toast.LENGTH_SHORT).show();
 
-        } else {
+        } else if (isValidId) {
+
             Uri uri = Uri.parse(mRealm.where(MusicFile.class).equalTo("id", id).findFirst().getUri());
             final int nextId = id + 1;
 
@@ -255,15 +278,11 @@ public class MusicService extends Service {
                     public void onCompletion(MediaPlayer mp) {
                         // 다음 uri값 구해서 넣어주기 <- id++로
 
-                        if (mRealm.where(MusicFile.class).equalTo("id", nextId).count() != 0) {
 
-//                            /**
-//                             * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI(Integer)}
-//                             */
-//                            EventBus.getDefault().post(nextId);
+//                        if (mRealm.where(MusicFile.class).equalTo("id", nextId).count() != 0) {
 
-                            playMusicList(nextId);
-                        }
+                        playMusicList(nextId);
+//                        }
                     }
                 });
 

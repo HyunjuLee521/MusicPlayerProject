@@ -46,10 +46,11 @@ public class PlayerFragment extends Fragment {
     private ImageView mRepaeatImageview;
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.player_fragment, container, false);
     }
 
