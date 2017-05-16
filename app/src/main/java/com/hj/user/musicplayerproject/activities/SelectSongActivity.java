@@ -22,6 +22,9 @@ import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBy
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
 import com.hj.user.musicplayerproject.models.MusicFile;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -35,6 +38,9 @@ public class SelectSongActivity extends AppCompatActivity {
     private Realm mRealm;
     private ArrayList<Uri> selectedSongUriList;
     private ViewPager mViewPager;
+
+    private boolean page1isCreated;
+    private Boolean songlistIsCreated;
 
 
     @Override
@@ -70,8 +76,12 @@ public class SelectSongActivity extends AppCompatActivity {
                 switch (mViewPager.getCurrentItem()) {
                     case 0:
                     case 1:
-                        addToSelectedSongUriList(mSelectSongBySongFragment.getSelectedSongUriArrayList());
-                        addToSelectedSongUriList(mSelectSongByArtistFragment.getSelectedSongUriArrayList());
+                        if (mSelectSongBySongFragment.getSelectedSongUriArrayList() != null) {
+                            addToSelectedSongUriList(mSelectSongBySongFragment.getSelectedSongUriArrayList());
+                        }
+                        if (page1isCreated && songlistIsCreated && mSelectSongByArtistFragment.getSelectedSongUriArrayList() != null) {
+                            addToSelectedSongUriList(mSelectSongByArtistFragment.getSelectedSongUriArrayList());
+                        }
 //                        selectedSongUriList = mSelectSongBySongFragment.getSelectedSongUriArrayList();
                         Log.d("", "onClick: " + selectedSongUriList.toString());
                         break;
@@ -111,7 +121,51 @@ public class SelectSongActivity extends AppCompatActivity {
         });
 
 
+        // page 1 붙었는지
+        page1isCreated = false;
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    page1isCreated = true;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        // songlist 붙었는지
+        songlistIsCreated = false;
     }
+
+
+    @Subscribe
+    public void songlistIsCreated(Boolean isCreated) {
+        songlistIsCreated = isCreated;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
 
     public void addToSelectedSongUriList(ArrayList<Uri> fragmentSongUriList) {
         for (Uri uri : fragmentSongUriList) {

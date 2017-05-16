@@ -268,6 +268,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
             // retriever값 가져와 -> 이미지 byte 꺼내기
             final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 //        retriever.setDataSource(MyUtils.getRealPath(this, uri));
+
             retriever.setDataSource(getContext(), Uri.parse(musicFile.getUri()));
 //             오디오 앨범 자켓 이미지
             final byte albumImage[] = retriever.getEmbeddedPicture();

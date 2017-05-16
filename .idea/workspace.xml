@@ -11,28 +11,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="533cc938-7f8f-4ec7-9636-2c80e4795c91" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/list_background.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/select_song_item.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_edit.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/android_android_25.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/constraint_layout_1_0_1.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/PlaylistRecyclerviewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/PlaylistRecyclerviewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/EditControllerFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/EditControllerFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlayerFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlayerFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/models/MusicFile.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/models/MusicFile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/realm_recyclerview.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/realm_recyclerview.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/song_fragment.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/song_fragment.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
     </list>
     <ignored path="MusicPlayerProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -81,8 +63,18 @@
       <file leaf-file-name="SelectSongByArtistListVIewAdapter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="644">
+            <state relative-caret-position="1736">
               <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlaylistFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -91,18 +83,38 @@
       <file leaf-file-name="SelectSongByArtistFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="325" column="76" selection-start-line="325" selection-start-column="76" selection-end-line="325" selection-end-column="77" />
+            <state relative-caret-position="542">
+              <caret line="121" column="99" selection-start-line="121" selection-start-column="99" selection-end-line="121" selection-end-column="99" />
               <folding>
-                <element signature="e#2401#4564#0" expanded="true" />
-                <element signature="e#3688#4519#0" expanded="true" />
-                <element signature="e#4518#4519#0" expanded="true" />
-                <element signature="e#4563#4564#0" expanded="true" />
-                <element signature="e#9087#9088#0" expanded="true" />
-                <element signature="e#9139#9140#0" expanded="true" />
-                <element signature="e#10541#10542#0" expanded="true" />
-                <element signature="e#10594#10595#0" expanded="true" />
+                <element signature="e#2401#4819#0" expanded="true" />
+                <element signature="e#3688#4774#0" expanded="true" />
+                <element signature="e#4773#4774#0" expanded="true" />
+                <element signature="e#4818#4819#0" expanded="true" />
+                <element signature="e#5896#5897#0" expanded="true" />
+                <element signature="e#5949#5950#0" expanded="true" />
+                <element signature="e#9486#9487#0" expanded="true" />
+                <element signature="e#9538#9539#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MusicControllerFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/MusicControllerFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="78" column="53" selection-start-line="78" selection-start-column="53" selection-end-line="78" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MusicService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -110,27 +122,56 @@
       <file leaf-file-name="SelectSongBySongFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="377" column="75" selection-start-line="377" selection-start-column="75" selection-end-line="377" selection-end-column="75" />
+            <state relative-caret-position="228">
+              <caret line="124" column="26" selection-start-line="124" selection-start-column="26" selection-end-line="124" selection-end-column="26" />
               <folding>
                 <element signature="e#2336#3368#0" expanded="true" />
                 <element signature="e#3367#3368#0" expanded="true" />
+                <element signature="e#3659#3660#0" expanded="true" />
+                <element signature="e#3710#3711#0" expanded="true" />
                 <element signature="e#8332#8350#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="select_song_item.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="select_song_item.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/select_song_item.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
+            <state relative-caret-position="420">
               <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding />
             </state>
           </provider>
           <provider editor-type-id="android-designer2">
             <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SelectSongActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="928">
+              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+              <folding>
+                <element signature="e#2373#4473#0" expanded="true" />
+                <element signature="e#4472#4473#0" expanded="true" />
+                <element signature="e#5195#5196#0" expanded="true" />
+                <element signature="e#5240#5241#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1671">
+              <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
           </provider>
         </entry>
       </file>
@@ -2100,7 +2141,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_select_songbyartist.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_edit_playlist.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/EditPlaylistFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/edit_controller_fragment.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/EditControllerFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/models/MusicFile.java" />
@@ -2115,12 +2155,13 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlayerFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/song_fragment.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/select_song_item.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java" />
       </list>
     </option>
   </component>
@@ -2945,15 +2986,16 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.62721896" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5822485" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2871179" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6923077" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11891892" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31386462" sideWeight="0.47100592" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969433" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -2967,8 +3009,38 @@
       <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5822485" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Dynamic Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2871179" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6923077" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11891892" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31386462" sideWeight="0.47100592" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289941" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32969433" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286026" sideWeight="0.5289941" order="5" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USER_GROUPS">
@@ -3179,6 +3251,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
           <caret line="73" column="0" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -3250,14 +3323,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/MusicControllerFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="41" column="58" selection-start-line="41" selection-start-column="58" selection-end-line="41" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/music_controller_fragment.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
@@ -3287,17 +3352,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1752">
-          <caret line="62" column="25" selection-start-line="62" selection-start-column="25" selection-end-line="62" selection-end-column="25" />
-          <folding>
-            <element signature="e#7639#8612#0" expanded="true" />
-            <element signature="e#8611#8612#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="674">
@@ -3313,14 +3367,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
           <caret line="5485" column="16" selection-start-line="5485" selection-start-column="16" selection-end-line="5485" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="66" column="38" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3343,18 +3389,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79">
-          <caret line="355" column="0" selection-start-line="355" selection-start-column="0" selection-end-line="355" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#7170#7171#0" expanded="false" />
-            <element signature="e#7225#7226#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/realm_recyclerview.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -3364,24 +3398,6 @@
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="28">
-          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="644">
-          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/PlaylistRecyclerviewAdapter.java">
@@ -3394,44 +3410,101 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="325" column="76" selection-start-line="325" selection-start-column="76" selection-end-line="325" selection-end-column="77" />
-          <folding>
-            <element signature="e#2401#4564#0" expanded="true" />
-            <element signature="e#3688#4519#0" expanded="true" />
-            <element signature="e#4518#4519#0" expanded="true" />
-            <element signature="e#4563#4564#0" expanded="true" />
-            <element signature="e#9087#9088#0" expanded="true" />
-            <element signature="e#9139#9140#0" expanded="true" />
-            <element signature="e#10541#10542#0" expanded="true" />
-            <element signature="e#10594#10595#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="377" column="75" selection-start-line="377" selection-start-column="75" selection-end-line="377" selection-end-column="75" />
-          <folding>
-            <element signature="e#2336#3368#0" expanded="true" />
-            <element signature="e#3367#3368#0" expanded="true" />
-            <element signature="e#8332#8350#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/select_song_item.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
+        <state relative-caret-position="420">
           <caret line="15" column="0" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongBySongFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="124" column="26" selection-start-line="124" selection-start-column="26" selection-end-line="124" selection-end-column="26" />
+          <folding>
+            <element signature="e#2336#3368#0" expanded="true" />
+            <element signature="e#3367#3368#0" expanded="true" />
+            <element signature="e#3659#3660#0" expanded="true" />
+            <element signature="e#3710#3711#0" expanded="true" />
+            <element signature="e#8332#8350#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1671">
+          <caret line="109" column="0" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/services/MusicService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/PlaylistFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/MainFragments/MusicControllerFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="78" column="53" selection-start-line="78" selection-start-column="53" selection-end-line="78" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/adapters/SelectSongByArtistListVIewAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1736">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/fragments/SelectSongFragments/SelectSongByArtistFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="542">
+          <caret line="121" column="99" selection-start-line="121" selection-start-column="99" selection-end-line="121" selection-end-column="99" />
+          <folding>
+            <element signature="e#2401#4819#0" expanded="true" />
+            <element signature="e#3688#4774#0" expanded="true" />
+            <element signature="e#4773#4774#0" expanded="true" />
+            <element signature="e#4818#4819#0" expanded="true" />
+            <element signature="e#5896#5897#0" expanded="true" />
+            <element signature="e#5949#5950#0" expanded="true" />
+            <element signature="e#9486#9487#0" expanded="true" />
+            <element signature="e#9538#9539#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/hj/user/musicplayerproject/activities/SelectSongActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="928">
+          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+          <folding>
+            <element signature="e#2373#4473#0" expanded="true" />
+            <element signature="e#4472#4473#0" expanded="true" />
+            <element signature="e#5195#5196#0" expanded="true" />
+            <element signature="e#5240#5241#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>

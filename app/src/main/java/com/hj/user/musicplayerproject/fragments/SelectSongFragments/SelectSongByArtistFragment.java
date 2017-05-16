@@ -118,6 +118,12 @@ public class SelectSongByArtistFragment extends Fragment {
 //                                mUriArrayLIst.remove(uri);
 //                            }
 
+                            /**
+                             * {@link com.hj.user.musicplayerproject.activities.SelectSongActivity#songlistIsCreated(Boolean)}
+                             */
+                            EventBus.getDefault().post(true);
+
+
                             mAdapter2.toggleSelection(position, uri);
 
                         }
@@ -146,7 +152,6 @@ public class SelectSongByArtistFragment extends Fragment {
         // ArrayList 초기화
         mUriArrayLIst = new ArrayList<>();
 
-
     }
 
 
@@ -172,9 +177,13 @@ public class SelectSongByArtistFragment extends Fragment {
         mRecyclerview.setAdapter(mAdapter1);
     }
 
+    // mUriArrayList return하는 메서드
+    public ArrayList<Uri> getSelectedSongUriArrayList() {
+        return mAdapter2.getSelectedUriList();
+    }
+
 
     // SongRecyclerAdapter
-
     // 어댑터
     public static class SongRecyclerAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
 
@@ -325,11 +334,6 @@ public class SelectSongByArtistFragment extends Fragment {
             titleTextView = (TextView) itemView.findViewById(R.id.title_textview);
             artistTextView = (TextView) itemView.findViewById(R.id.artist_textview);
         }
-    }
-
-    // mUriArrayList return하는 메서드
-    public ArrayList<Uri> getSelectedSongUriArrayList() {
-        return mAdapter2.getSelectedUriList();
     }
 
 
