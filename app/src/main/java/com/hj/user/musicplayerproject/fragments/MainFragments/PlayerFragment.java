@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -44,8 +45,6 @@ public class PlayerFragment extends Fragment {
 
     private ImageView mHeartImageview;
     private ImageView mRepaeatImageview;
-
-
 
 
     @Nullable
@@ -112,12 +111,12 @@ public class PlayerFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    int id = -1;
+
+    Uri uri;
 
     @Subscribe
-    public void updateUI(Boolean isPlaying) {
-
-        if (id != mService.getCurrentId()) {
+    public void updateUI2(Boolean isPlaying) {
+        if (uri == null || uri != mService.getCurrentUri()) {
             MediaMetadataRetriever retriever = mService.getMetaDataRetriever();
             // 미디어 정보
 //        final String mUri = uri.toString();
@@ -128,7 +127,6 @@ public class PlayerFragment extends Fragment {
             // 오디오 앨범 자켓 이미지
             // bitmap -> String으로 변환하여 저장
 //        final String image;
-
 
 
             byte albumImage[] = retriever.getEmbeddedPicture();
@@ -155,7 +153,8 @@ public class PlayerFragment extends Fragment {
 
         }
 
-        id = mService.getCurrentId();
-
+        uri = mService.getCurrentUri();
     }
+
+
 }

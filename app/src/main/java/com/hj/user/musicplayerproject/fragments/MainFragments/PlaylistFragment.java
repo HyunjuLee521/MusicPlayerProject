@@ -1,7 +1,6 @@
 package com.hj.user.musicplayerproject.fragments.MainFragments;
 
 import android.content.Intent;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -53,102 +52,8 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
 
 
     private ArrayList<Integer> mEditPlaylistSelectedId;
-
-//    // 선언
-//    private ActionModeCallback mActionModeCallback;
-//    private ActionMode mActionMode;
-
-//
-//    // 액션모드 활성화시키는 메서드
-//    private void enableActionMode() {
-//        if (mActionMode == null) {
-//            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-////            mActionMode.setTitle("확인");
-//
-//            // TODO 확인
-////            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("확인");
-//        }
-//    }
-//
-//    private class ActionModeCallback implements ActionMode.Callback {
-//
-//        @Override
-//        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//            mode.getMenuInflater().inflate(R.menu.menu_edit, menu);
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//
-//            return true;
-//        }
-//
-//        @Override
-//        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.action_editting:
-//                    /**
-//                     * {@link com.hj.user.musicplayerproject.activities.MainActivity#changeLayoutToEdit(String)}
-//                     */
-//                    if (item.getTitle().equals("편집")) {
-//
-//
-//                        item.setTitle("확인");
-//                        EventBus.getDefault().post("확인");
-//                        mPickButton.setVisibility(View.INVISIBLE);
-//
-//                        mRecyclerview.setAdapter(mAdapter2);
-//
-//                    } else {
-//
-//
-//                        item.setTitle("편집");
-//                        EventBus.getDefault().post("편집");
-//                        mPickButton.setVisibility(View.VISIBLE);
-//
-//                        mAdapter2.clearSelection();
-//                        mActionMode = null;
-//
-//                        mRecyclerview.setAdapter(mAdapter1);
-//
-////                        mode.finish();
-//                    }
-//                    break;
-//
-//                default:
-//                    break;
-//
-////                // 편집메뉴
-////                case R.id.action_delete:
-////                    // 선택된 아이템 지우고 데이터 갱신
-////                    // 단일삭제, 일괄삭제구현
-////                    if (mAdapter.getSelectedItemCount() == 1) {
-////                        // 한개만 선택되었을때
-////                        deleteSingleItem();
-////                    } else {
-////                        deleteMultiItem();
-////                    }
-////                    break;
-////                case R.id.action_complete:
-//////                    getSupportActionBar().setTitle("ServerMemo");
-////                    mode.finish();
-//////                    isReplace = true;
-//////                    invalidateOptionsMenu();
-////                    break;
-//            }
-//
-//            return true;
-//        }
-//
-//        @Override
-//        public void onDestroyActionMode(ActionMode mode) {
-//            // ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("ServerMemo");
-//            mAdapter2.clearSelection();
-//            mActionMode = null;
-//            mode.finish();
-//        }
-//    }
+    private ArrayList<String> mEditPlaylistSelectedUri;
+    private ArrayList<Integer> mEditPlaylistSelectedPosition;
 
 
     @Override
@@ -160,6 +65,8 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
         // TODO 오류 : 렘 마이그레이션?
 
         mEditPlaylistSelectedId = new ArrayList<Integer>();
+        mEditPlaylistSelectedUri = new ArrayList<String>();
+        mEditPlaylistSelectedPosition = new ArrayList<Integer>();
 
         // 초기화
 //        mActionModeCallback = new ActionModeCallback();
@@ -214,6 +121,8 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
                  * {@link com.hj.user.musicplayerproject.activities.MainActivity#changeLayoutToEdit(String)}
                  */
                 if (item.getTitle().equals("편집")) {
+                    // 편집 모드
+
                     item.setTitle("확인");
                     EventBus.getDefault().post("확인");
                     mPickButton.setVisibility(View.INVISIBLE);
@@ -221,6 +130,9 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
                     mRecyclerview.setAdapter(mAdapter2);
 
                 } else {
+                    // 재생 모드
+
+
                     item.setTitle("편집");
                     EventBus.getDefault().post("편집");
                     mPickButton.setVisibility(View.VISIBLE);
@@ -261,19 +173,22 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
         // OrderedRealmCollection <MusicFile> 생성
         musicFileRealmResults = mRealm.where(MusicFile.class).findAll();
 
+        // TODO 이벤트버스로 보내기
 
-        for (int i = 1; i <= mRealm.where(MusicFile.class).count(); i++) {
-            MusicFile musicFile = mRealm.where(MusicFile.class).equalTo("id", i).findFirst();
 
-            // retriever값 가져와 -> 이미지 byte 꺼내기
-            final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//        retriever.setDataSource(MyUtils.getRealPath(this, uri));
-
-            retriever.setDataSource(getContext(), Uri.parse(musicFile.getUri()));
-//             오디오 앨범 자켓 이미지
-            final byte albumImage[] = retriever.getEmbeddedPicture();
-
-        }
+//
+//        for (int i = 1; i <= mRealm.where(MusicFile.class).count(); i++) {
+//            MusicFile musicFile = mRealm.where(MusicFile.class).equalTo("id", i).findFirst();
+//
+//            // retriever값 가져와 -> 이미지 byte 꺼내기
+//            final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+////        retriever.setDataSource(MyUtils.getRealPath(this, uri));
+//
+//            retriever.setDataSource(getContext(), Uri.parse(musicFile.getUri()));
+////             오디오 앨범 자켓 이미지
+//            final byte albumImage[] = retriever.getEmbeddedPicture();
+//
+//        }
 
 
         mAdapter1 = new PlaylistRecyclerviewAdapter(getContext(), musicFileRealmResults, 1);
@@ -298,6 +213,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), MusicService.class);
                 intent.putExtra("id", id);
                 intent.putExtra("uri", uri.toString());
+                intent.putExtra("position", position);
 
                 intent.setAction(MusicService.ACTION_PLAY);
                 getActivity().startService(intent);
@@ -318,9 +234,13 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
 
                 if (view.getTag() == null || (boolean) view.getTag() == false) {
                     mEditPlaylistSelectedId.add(id);
+                    mEditPlaylistSelectedUri.add(uri.toString());
+                    mEditPlaylistSelectedPosition.add(position);
 
                 } else {
                     mEditPlaylistSelectedId.remove((Integer) id);
+                    mEditPlaylistSelectedUri.remove(uri.toString());
+                    mEditPlaylistSelectedPosition.remove((Integer) position);
                 }
 
 //                mAdapter2.setSelect(position);
@@ -390,6 +310,21 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     public void editPlaylist(Integer integer) {
 
         switch (integer) {
+            case 2:
+                // 위로
+                moveUpSelectedItem();
+
+                int size = mRealm.where(MusicFile.class).findAll().size();
+                Toast.makeText(getContext(), "MusicFile.class 의 크기 " + size, Toast.LENGTH_SHORT).show();
+
+                mAdapter2.notifyDataSetChanged();
+                mRecyclerview.setAdapter(mAdapter2);
+
+
+
+                break;
+
+
             case 4:
                 // 삭제시
 //                Toast.makeText(getContext(), "이벤트버스 도착 " + integer, Toast.LENGTH_SHORT).show();
@@ -412,7 +347,11 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
             case 5:
                 // 선택취소시
                 mAdapter2.clearSelection();
+
                 mEditPlaylistSelectedId.clear();
+                mEditPlaylistSelectedUri.clear();
+                mEditPlaylistSelectedPosition.clear();
+
                 mRecyclerview.setAdapter(mAdapter2);
 
 
@@ -430,6 +369,7 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     private void deleteSelectedItem() {
 //        for (final int position : mEditPlaylistSelectedId) {
 
+        // 1. 렘에서 지우기
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -437,11 +377,10 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
 
                 // 해당 포지션의 아이템 렘에서 지우기
 //                    List<Integer> myList = new ArrayList<Integer>();
-                Integer[] wrapperArr = mEditPlaylistSelectedId.toArray(new Integer[mEditPlaylistSelectedId.size()]);
-
+                Integer[] wrapperIdArr = mEditPlaylistSelectedId.toArray(new Integer[mEditPlaylistSelectedId.size()]);
 
                 mRealm.where(MusicFile.class)
-                        .in("id", wrapperArr)
+                        .in("id", wrapperIdArr)
                         .findAll()
                         .deleteAllFromRealm();
 
@@ -451,8 +390,41 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
 
 //        }
 
+
+        // clear
         mEditPlaylistSelectedId.clear();
+        mEditPlaylistSelectedUri.clear();
+//        mEditPlaylistSelectedPosition.clear();
+
         mAdapter2.clearSelection();
 
     }
+
+
+    private void moveUpSelectedItem() {
+
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+
+            }
+        });
+
+
+        // clear
+        mEditPlaylistSelectedId.clear();
+        mEditPlaylistSelectedUri.clear();
+//        mEditPlaylistSelectedPosition.clear();
+
+        mAdapter2.clearSelection();
+
+    }
+
+    private void moveDownSelectedItem() {
+
+
+    }
+
+
 }

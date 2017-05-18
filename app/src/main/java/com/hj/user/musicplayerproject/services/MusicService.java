@@ -15,15 +15,16 @@ import android.support.annotation.Nullable;
 import android.widget.Toast;
 
 import com.hj.user.musicplayerproject.models.MusicFile;
-import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by USER on 2017-03-31.
@@ -55,9 +56,13 @@ public class MusicService extends Service {
     private boolean mAudioFocusGranted;
     private int mAudioFocusState;
 
+    private Uri currentUri;
     private int currentId;
 
+
     private ArrayList<Uri> mSongUriList;
+
+
     private int mIndex = 0;
 
 
@@ -70,7 +75,7 @@ public class MusicService extends Service {
         mAudioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
 
         // 이벤트 버스 연결
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
 
 
         // TODO 오디오 포커스를 잃었을 때
@@ -128,31 +133,13 @@ public class MusicService extends Service {
         super.onDestroy();
 
         // 이벤트 버스 해제
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
 
         // 렘 닫기
         mRealm.close();
     }
 
 
-    // TODO 5/17 mSongUriList db에 저장해야할것같음
-    @Subscribe
-    public void getSelectedUriArraylist(final MyUtils.sendSongUriEvent event) {
-        mSongUriList = event.uriArrayList;
-
-        // 렘에 저장
-//        mRealm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                Playlist playlist = realm.where(Playlist.class)
-//                        .findFirst();
-//                playlist.setUriArrayList(event.uriArrayList);
-//                realm.insertOrUpdate(playlist);
-//            }
-//        });
-
-
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -164,19 +151,20 @@ public class MusicService extends Service {
                 // 방법1 : id
 //                playMusicList(intent.getIntExtra("id", -1));
 
+                getSongUriFromRealm();
                 // 방법2 : uri
-
-
                 Uri uri = Uri.parse(intent.getStringExtra("uri"));
-                playMusicList2(uri);
+                int position = intent.getIntExtra("position", -1);
+
+                playMusicList2(uri, position);
 
 
             } else if (ACTION_RESUME.equals(action) && mMediaPlayer != null) {
                 clickResumeButton();
             } else if (ACTION_PREV.equals(action) && mMediaPlayer != null) {
-                prevMusic2();
+                prevMusic3();
             } else if (ACTION_NEXT.equals(action) && mMediaPlayer != null) {
-                nextMusic2();
+                nextMusic3();
             }
         }
         return START_STICKY;
@@ -224,9 +212,10 @@ public class MusicService extends Service {
         return mRetriever;
     }
 
-    public Integer getCurrentId() {
-        return currentId;
+    public Uri getCurrentUri() {
+        return currentUri;
     }
+
 
     public boolean isPlaying() {
         if (mMediaPlayer != null) {
@@ -236,64 +225,71 @@ public class MusicService extends Service {
     }
 
 
-    private void setIdPref(Context context, String key, int values) {
+    private void setStringArrayPref(Context context, String key, ArrayList<String> values) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-
-        editor.putInt(key, values);
+        JSONArray a = new JSONArray();
+        for (int i = 0; i < values.size(); i++) {
+            a.put(values.get(i));
+        }
+        if (!values.isEmpty()) {
+            editor.putString(key, a.toString());
+        } else {
+            editor.putString(key, null);
+        }
         editor.apply();
     }
 
-    private int getIdPref(Context context, String key) {
+    private ArrayList<String> getStringArrayPref(Context context, String key) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int id = prefs.getInt(key, -1);
-        return id;
+        String json = prefs.getString(key, null);
+        ArrayList<String> uriArraylist = new ArrayList<String>();
+        if (json != null) {
+            try {
+                JSONArray a = new JSONArray(json);
+                for (int i = 0; i < a.length(); i++) {
+                    String uri = a.optString(i);
+                    uriArraylist.add(uri);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return uriArraylist;
     }
 
 
-    public void nextMusic2() {
+    public void nextMusic3() {
+
+        getSongUriFromRealm();
+
         mIndex++;
         if (mIndex > mSongUriList.size() - 1) {
             mIndex = 0;
         }
-        playMusicList2(mSongUriList.get(mIndex));
-
-
-//        Playlist playlist = mRealm.where(Playlist.class)
-//                .findFirst();
-//
-//        ArrayList<Uri> arrayList = playlist.getUriArrayList();
-//        if (mIndex > arrayList.size() - 1) {
-//            mIndex = 0;
-//        }
-//        playMusicList2(arrayList.get(mIndex));
-
+        playMusicList2(mSongUriList.get(mIndex), mIndex);
     }
 
-    public void prevMusic2() {
+
+    public void prevMusic3() {
+
+
+        getSongUriFromRealm();
+
         mIndex--;
         if (mIndex < 0) {
             mIndex = mSongUriList.size() - 1;
         }
-        playMusicList2(mSongUriList.get(mIndex));
+        playMusicList2(mSongUriList.get(mIndex), mIndex);
 
-//
-//        Playlist playlist = mRealm.where(Playlist.class)
-//                .findFirst();
-//
-//        ArrayList<Uri> arrayList = playlist.getUriArrayList();
-//
-//        mIndex--;
-//        if (mIndex < 0) {
-//            mIndex = arrayList.size() - 1;
-//        }
-//        playMusicList2(arrayList.get(mIndex));
     }
 
 
     // Uri 값으로 플레이리스트 재생
-    private void playMusicList2(final Uri uri) {
+    private void playMusicList2(final Uri uri, final int index) {
         try {
+            currentUri = uri;
+
             // 현재 재생중인 정보
             mRetriever = new MediaMetadataRetriever();
             mRetriever.setDataSource(this, uri);
@@ -310,8 +306,11 @@ public class MusicService extends Service {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
 
-                    mIndex = mSongUriList.indexOf(uri);
+//                    getSongUriListFromRealm();
 
+                    // TODO
+//                    mIndex = mSongUriList.indexOf(uri);
+                    mIndex = index;
 
 //
 //                    Playlist playlist = mRealm.where(Playlist.class)
@@ -322,13 +321,13 @@ public class MusicService extends Service {
 //                    mIndex = arrayList.indexOf(uri);
 
 
-                    Toast.makeText(MusicService.this, "음악을 재생합니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MusicService.this, mIndex + "번 째 음악을 재생합니다", Toast.LENGTH_SHORT).show();
                     mp.start();
 
 
                     /**
+                     * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI2(Boolean)}
                      * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateResumeImageview(Boolean)}
-                     * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI(Boolean)}
                      */
                     EventBus.getDefault().post(isPlaying());
 
@@ -343,7 +342,7 @@ public class MusicService extends Service {
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    nextMusic2();
+                    nextMusic3();
                 }
             });
 
@@ -371,7 +370,7 @@ public class MusicService extends Service {
         }
 
         currentId = id;
-        setIdPref(MusicService.this, "id", currentId);
+//        setIdPref(MusicService.this, "id", currentId);
 
         if (id == -1) {
             Toast.makeText(this, "id값이 -1 : SongFragment에서 id값 전달받지 못했음", Toast.LENGTH_SHORT).show();
@@ -442,24 +441,6 @@ public class MusicService extends Service {
     }
 
 
-    public void nextMusic() {
-        currentId++;
-
-        if (currentId > mRealm.where(MusicFile.class).count()) {
-            currentId = 1;
-        }
-        playMusicList(currentId);
-    }
-
-    public void prevMusic() {
-        currentId--;
-        if (currentId < 1) {
-            currentId = (int) mRealm.where(MusicFile.class).count();
-        }
-        playMusicList(currentId);
-    }
-
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -473,6 +454,47 @@ public class MusicService extends Service {
             // Return this instance of LocalService so clients can call public methods
             return MusicService.this;
         }
+    }
+
+
+
+    // 렘 -> 어레이리스트로 바꾸기
+    public ArrayList<MusicFile> getModelList() {
+        ArrayList<MusicFile> list = new ArrayList<>();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            RealmResults<MusicFile> results = realm
+                    .where(MusicFile.class)
+                    .findAll();
+            list.addAll(realm.copyFromRealm(results));
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
+        return list;
+    }
+
+    public void getSongUriFromRealm() {
+
+        ArrayList<MusicFile> arrayList = new ArrayList<>();
+        arrayList = getModelList();
+
+//        ArrayList<String> temp = new ArrayList<String>();
+//        temp.clear();
+
+        // mSongUriList.clear();
+        mSongUriList.clear();
+
+        for (MusicFile musicFile : arrayList) {
+            mSongUriList.add(Uri.parse(musicFile.getUri()));
+//            temp.add(musicFile.getUri());
+        }
+
+//        Toast.makeText(this, "렘 어레이리스트로 바꾼 크기" + arrayList.size()
+//                + "\n mSongUriList에 담긴 크기 " + mSongUriList.size(), Toast.LENGTH_SHORT).show();
+//        setStringArrayPref(this, "uriList", temp);
     }
 
 }

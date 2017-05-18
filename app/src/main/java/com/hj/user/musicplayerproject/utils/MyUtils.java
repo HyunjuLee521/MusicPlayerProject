@@ -19,6 +19,13 @@ public class MyUtils {
         public ArrayList<Uri> uriArrayList;
     }
 
+    public static class editPlaylistEvent {
+        public editPlaylistEvent(ArrayList<Integer> positionArrayList) {
+            this.positionArrayList = positionArrayList;
+
+        }
+        public ArrayList<Integer> positionArrayList;
+    }
 
 
 }

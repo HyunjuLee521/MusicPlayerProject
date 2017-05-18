@@ -20,7 +20,6 @@ import com.hj.user.musicplayerproject.R;
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongByArtistFragment;
 import com.hj.user.musicplayerproject.fragments.SelectSongFragments.SelectSongBySongFragment;
 import com.hj.user.musicplayerproject.models.MusicFile;
-import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -41,7 +40,6 @@ public class SelectSongActivity extends AppCompatActivity {
 
     private boolean page1isCreated;
     private Boolean songlistIsCreated;
-
 
 
     @Override
@@ -94,14 +92,7 @@ public class SelectSongActivity extends AppCompatActivity {
 
 
                 if (selectedSongUriList.size() > 0) {
-//                    mRealm.executeTransaction(new Realm.Transaction() {
-//                        @Override
-//                        public void execute(Realm realm) {
-//                            if (mRealm.where(MusicFile.class).count() > 0) {
-//                                mRealm.where(MusicFile.class).findAll().deleteAllFromRealm();
-//                            }
-//                        }
-//                    });
+
 
                     for (Uri uri : selectedSongUriList) {
                         getSongToPlaylist(uri);
@@ -111,19 +102,9 @@ public class SelectSongActivity extends AppCompatActivity {
                             , Toast.LENGTH_SHORT).show();
 
 
-//                    Intent intent = new Intent();
-//                    setResult(RESULT_OK, intent);
-
-
-                    /**
-                     * {@link com.hj.user.musicplayerproject.services.MusicService#getSelectedUriArraylist(com.hj.user.musicplayerproject.utils.MyUtils.sendSongUriEvent)}
-                     */
-
-
-                    MyUtils.sendSongUriEvent event = new MyUtils.sendSongUriEvent(selectedSongUriList);
-                    EventBus.getDefault().post(event);
-
+                    // 닫기
                     finish();
+
 
                 } else {
                     Toast.makeText(SelectSongActivity.this, "선택된 음악이 없습니다", Toast.LENGTH_SHORT).show();
@@ -157,7 +138,6 @@ public class SelectSongActivity extends AppCompatActivity {
         // songlist 붙었는지
         songlistIsCreated = false;
     }
-
 
 
     @Subscribe
@@ -296,11 +276,10 @@ public class SelectSongActivity extends AppCompatActivity {
                 musicFile.setImage2(image2);
 
 
-                // TODO id값 부여
                 Number currentIdNum = mRealm.where(MusicFile.class).max("id");
                 int nextId;
                 if (currentIdNum == null) {
-                    nextId = 1;
+                    nextId = 0;
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
@@ -314,6 +293,8 @@ public class SelectSongActivity extends AppCompatActivity {
 
         if (mRealm.where(MusicFile.class).count() > 0) {
             MusicFile musicFile = mRealm.where(MusicFile.class).findFirst();
+
+
         }
 
     }

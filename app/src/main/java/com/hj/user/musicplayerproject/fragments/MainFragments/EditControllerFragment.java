@@ -18,8 +18,11 @@ import org.greenrobot.eventbus.EventBus;
 
 public class EditControllerFragment extends Fragment implements View.OnClickListener {
 
+    private LinearLayout mUpLinearlayout;
+    private LinearLayout mDownLinearlayout;
     private LinearLayout mCancelLinearlayout;
     private LinearLayout mDeleteLinearlayout;
+
 
     @Nullable
     @Override
@@ -38,18 +41,38 @@ public class EditControllerFragment extends Fragment implements View.OnClickList
         mDeleteLinearlayout = (LinearLayout) view.findViewById(R.id.delete_linearlayout);
         mDeleteLinearlayout.setOnClickListener(this);
 
+        mUpLinearlayout = (LinearLayout) view.findViewById(R.id.up_linearlayout);
+        mUpLinearlayout.setOnClickListener(this);
+
+        mDownLinearlayout = (LinearLayout) view.findViewById(R.id.down_linearlayout);
+        mDownLinearlayout.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.cancel_linearlayout:
+
+            case R.id.up_linearlayout:
                 /**
                  * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}
                  */
-                EventBus.getDefault().post(5);
+                EventBus.getDefault().post(2);
+
                 break;
+
+
+            case R.id.down_linearlayout:
+
+                /**
+                 * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}
+                 */
+                EventBus.getDefault().post(3);
+
+                break;
+
+
 
             case R.id.delete_linearlayout:
                 /**
@@ -57,6 +80,19 @@ public class EditControllerFragment extends Fragment implements View.OnClickList
                  */
                 EventBus.getDefault().post(4);
                 break;
+
+
+            case R.id.cancel_linearlayout:
+                /**
+                 * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}
+                 */
+                EventBus.getDefault().post(5);
+                break;
+
+
+
+
+
 
             default:
                 break;
