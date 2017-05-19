@@ -54,26 +54,6 @@ public class EditControllerFragment extends Fragment implements View.OnClickList
 
         switch (v.getId()) {
 
-            case R.id.up_linearlayout:
-                /**
-                 * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}
-                 */
-                EventBus.getDefault().post(2);
-
-                break;
-
-
-            case R.id.down_linearlayout:
-
-                /**
-                 * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}
-                 */
-                EventBus.getDefault().post(3);
-
-                break;
-
-
-
             case R.id.delete_linearlayout:
                 /**
                  * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment#editPlaylist(Integer)}

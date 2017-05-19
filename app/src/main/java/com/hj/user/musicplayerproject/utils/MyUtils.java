@@ -28,4 +28,16 @@ public class MyUtils {
     }
 
 
+
+    public static class changePlayModeEvent {
+        public changePlayModeEvent(String playMode) {
+            this.playMode = playMode;
+        }
+
+        public String playMode;
+    }
+
+
+
+
 }

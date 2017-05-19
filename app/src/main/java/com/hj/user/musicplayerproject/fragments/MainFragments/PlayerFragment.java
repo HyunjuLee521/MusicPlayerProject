@@ -4,6 +4,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,16 +21,24 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hj.user.musicplayerproject.R;
+import com.hj.user.musicplayerproject.models.FavoriteMusicFile;
+import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.services.MusicService;
+import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by USER on 2017-03-22.
  */
 
-public class PlayerFragment extends Fragment {
+public class PlayerFragment extends Fragment implements View.OnClickListener {
 
     private MusicService mService;
     private boolean mBound = false;
@@ -46,6 +56,24 @@ public class PlayerFragment extends Fragment {
     private ImageView mHeartImageview;
     private ImageView mRepaeatImageview;
 
+    private Realm mRealm;
+
+
+    private String mPlayMode;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mRealm = Realm.getDefaultInstance();
+
+        mPlayMode = "repeat";
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
 
     @Nullable
     @Override
@@ -69,6 +97,9 @@ public class PlayerFragment extends Fragment {
 
         mHeartImageview = (ImageView) view.findViewById(R.id.heart_imageview);
         mRepaeatImageview = (ImageView) view.findViewById(R.id.repeat_imageview);
+
+        mHeartImageview.setOnClickListener(this);
+        mRepaeatImageview.setOnClickListener(this);
 
 
     }
@@ -108,6 +139,7 @@ public class PlayerFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
+
         EventBus.getDefault().unregister(this);
     }
 
@@ -116,6 +148,7 @@ public class PlayerFragment extends Fragment {
 
     @Subscribe
     public void updateUI2(Boolean isPlaying) {
+
         if (uri == null || uri != mService.getCurrentUri()) {
             MediaMetadataRetriever retriever = mService.getMetaDataRetriever();
             // 미디어 정보
@@ -151,9 +184,236 @@ public class PlayerFragment extends Fragment {
             // TODO
             mEndTimeTextview.setText(duration);
 
+
+//            RealmQuery<FavoriteMusicFile> a = mRealm.where(FavoriteMusicFile.class);
+//            RealmQuery<FavoriteMusicFile> b = a.equalTo("uri", uri.toString());
+//            RealmResults<FavoriteMusicFile> c = b.findAll();
+//            int d = c.size();
+
+
         }
 
         uri = mService.getCurrentUri();
+
+        boolean itemIsFavorite = false;
+
+        if (mRealm.where(FavoriteMusicFile.class)
+                .equalTo("uri", uri.toString())
+                .findAll()
+                .size() > 0 &&
+                mRealm.where(FavoriteMusicFile.class) != null) {
+            itemIsFavorite = true;
+        }
+
+
+//        Toast.makeText(getActivity(), "좋아요 플레이리스트 렘에 들어간 갯수 "
+//                        + mRealm.where(FavoriteMusicFile.class)
+//                        .findAll()
+//                        .size(),
+//                Toast.LENGTH_SHORT).show();
+
+        if (itemIsFavorite) {
+//                mHeartImageview.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+
+//            Toast.makeText(getActivity(), "좋아요 되어있음", Toast.LENGTH_SHORT).show();
+            Glide.with(this).load(R.drawable.like_black).into(mHeartImageview);
+
+
+        } else {
+//                mHeartImageview.setImageResource(R.drawable.like_black);
+//            Toast.makeText(getActivity(), "좋아요 되어있지않음", Toast.LENGTH_SHORT).show();
+            Glide.with(this).load(R.drawable.like_white).into(mHeartImageview);
+
+        }
+
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        final Uri uri = mService.getCurrentUri();
+
+        switch (v.getId()) {
+            case R.id.heart_imageview:
+                if (uri != null) {
+
+                    boolean itemIsFavorite = false;
+
+                    if (mRealm.where(FavoriteMusicFile.class)
+                            .equalTo("uri", uri.toString())
+                            .findAll()
+                            .size() > 0 &&
+                            mRealm.where(FavoriteMusicFile.class) != null) {
+                        itemIsFavorite = true;
+                    }
+
+                    if (itemIsFavorite) {
+                        // 이미 선택되어 있음
+
+                        Glide.with(this).load(R.drawable.like_white).into(mHeartImageview);
+
+                        mRealm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+
+                                realm.where(FavoriteMusicFile.class)
+                                        .equalTo("uri", uri.toString())
+                                        .findAll()
+                                        .deleteAllFromRealm();
+
+                            }
+                        });
+
+                    } else {
+                        // 선택되어 있지 않음
+
+                        Glide.with(this).load(R.drawable.like_black).into(mHeartImageview);
+                        getSongToFavoritePlaylist(uri);
+                    }
+
+                }
+                break;
+
+
+            case R.id.repeat_imageview:
+                if (uri != null) {
+                    if (mPlayMode.equals("play_one")) {
+                        // 1. 전체 반복 default (리핏블랙)
+                        Glide.with(this).load(R.drawable.repeat).into(mRepaeatImageview);
+                        mPlayMode = "repeat";
+
+                    } else if (mPlayMode.equals("repeat")) {
+                        // 2. 전체 랜덤 반복 (셔플)
+
+                        Glide.with(this).load(R.drawable.shuffle).into(mRepaeatImageview);
+                        mPlayMode = "shuffle";
+
+                    } else if (mPlayMode.equals("shuffle")) {
+                        // 3. 한곡 반복 (플레이 원)
+
+                        Glide.with(this).load(R.drawable.play_one).into(mRepaeatImageview);
+                        mPlayMode = "play_one";
+                    }
+
+                    /**
+                     * {@link com.hj.user.musicplayerproject.services.MusicService#getChangedPlayMode(MyUtils.changePlayModeEvent)}
+                     */
+
+                    MyUtils.changePlayModeEvent event = new MyUtils.changePlayModeEvent(mPlayMode);
+                    EventBus.getDefault().post(event);
+
+                }
+
+
+
+
+                break;
+
+            default:
+                break;
+
+
+        }
+
+
+    }
+
+
+    public ArrayList<MusicFile> getModelList() {
+        ArrayList<MusicFile> list = new ArrayList<>();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            RealmResults<MusicFile> results = realm
+                    .where(MusicFile.class)
+                    .findAll();
+            list.addAll(realm.copyFromRealm(results));
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
+        return list;
+    }
+
+    public ArrayList<MusicFile> getModelList2(RealmResults<MusicFile> musicFIles) {
+        ArrayList<MusicFile> list = new ArrayList<>();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            list.addAll(realm.copyFromRealm(musicFIles));
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
+        return list;
+    }
+
+
+    // uri값 받아와서
+    // Realm 테이블 MusicFile에 저장
+    public void getSongToFavoritePlaylist(Uri uri) {
+
+        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//        retriever.setDataSource(MyUtils.getRealPath(this, uri));
+        retriever.setDataSource(getContext(), uri);
+
+        // 미디어 정보
+        final String mUri = uri.toString();
+        final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+        // 오디오 앨범 자켓 이미지
+        // bitmap -> String으로 변환하여 저장
+        final byte[] image2;
+
+
+//             오디오 앨범 자켓 이미지
+        byte albumImage[] = retriever.getEmbeddedPicture();
+        if (null != albumImage) {
+            // 바이트 -> 비트맵
+            Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
+            // 비트맵 -> String
+            image2 = albumImage;
+
+        } else {
+            image2 = null;
+
+        }
+
+
+        // 렘에 저장
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+
+                FavoriteMusicFile favoriteMusicFile = mRealm.createObject(FavoriteMusicFile.class);
+
+                favoriteMusicFile.setUri(mUri);
+                favoriteMusicFile.setArtist(artist);
+                favoriteMusicFile.setTitle(title);
+                favoriteMusicFile.setDuration(duration);
+                favoriteMusicFile.setImage2(image2);
+
+
+                Number currentIdNum = mRealm.where(FavoriteMusicFile.class).max("id");
+                int nextId;
+                if (currentIdNum == null) {
+                    nextId = 0;
+                } else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+                favoriteMusicFile.setId(nextId);
+                mRealm.insertOrUpdate(favoriteMusicFile); // using insert API
+
+
+            }
+        });
+
+
     }
 
 

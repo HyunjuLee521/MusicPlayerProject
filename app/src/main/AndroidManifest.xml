@@ -22,9 +22,6 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,6 +44,7 @@
 
         <service android:name=".services.MusicService" />
 
+        <activity android:name=".fragments.MainFragments.FavoritePlaylistFragment"></activity>
     </application>
 
 </manifest>

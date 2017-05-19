@@ -1,15 +1,15 @@
 package com.hj.user.musicplayerproject.models;
 
-
 import java.util.Arrays;
 
 import io.realm.RealmObject;
 
 /**
- * Created by USER on 2017-03-23.
+ * Created by USER on 2017-05-19.
  */
 
-public class MusicFile extends RealmObject {
+public class FavoriteMusicFile extends RealmObject {
+
 
     int id;
     String uri;
@@ -20,32 +20,6 @@ public class MusicFile extends RealmObject {
     byte[] image2;
     int position;
 
-    boolean isFavorite;
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public byte[] getImage2() {
-        return image2;
-    }
-
-    public void setImage2(byte[] image2) {
-        this.image2 = image2;
-    }
-
     public int getId() {
         return id;
     }
@@ -53,15 +27,6 @@ public class MusicFile extends RealmObject {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
 
     public String getUri() {
         return uri;
@@ -87,10 +52,34 @@ public class MusicFile extends RealmObject {
         this.artist = artist;
     }
 
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public byte[] getImage2() {
+        return image2;
+    }
+
+    public void setImage2(byte[] image2) {
+        this.image2 = image2;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 
     @Override
     public String toString() {
-        return "MusicFile{" +
+        return "FavoriteMusicFile{" +
                 "id=" + id +
                 ", uri='" + uri + '\'' +
                 ", title='" + title + '\'' +
@@ -98,7 +87,6 @@ public class MusicFile extends RealmObject {
                 ", duration='" + duration + '\'' +
                 ", image2=" + Arrays.toString(image2) +
                 ", position=" + position +
-                ", isFavorite=" + isFavorite +
                 '}';
     }
 }

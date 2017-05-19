@@ -14,9 +14,12 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.hj.user.musicplayerproject.models.FavoriteMusicFile;
 import com.hj.user.musicplayerproject.models.MusicFile;
+import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -35,6 +38,8 @@ public class MusicService extends Service {
     // PlaylistFragment
     // 리스트뷰에서 아이템(곡) 클릭
     public static String ACTION_PLAY = "play";
+
+    public static String ACTION_FAVORITE_PLAY = "favorite";
 
     // MusicControllerFragment의
     // 가운데 버튼(재생, 일시중지) 클릭
@@ -57,6 +62,8 @@ public class MusicService extends Service {
     private int mAudioFocusState;
 
     private Uri currentUri;
+    private int currentIndex;
+
     private int currentId;
 
 
@@ -64,6 +71,8 @@ public class MusicService extends Service {
 
 
     private int mIndex = 0;
+
+    private int mPlayModeDefaultIs1andFavoriteIs2;
 
 
     @Override
@@ -75,7 +84,7 @@ public class MusicService extends Service {
         mAudioManager = (AudioManager) this.getSystemService(this.AUDIO_SERVICE);
 
         // 이벤트 버스 연결
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
 
         // TODO 오디오 포커스를 잃었을 때
@@ -133,12 +142,11 @@ public class MusicService extends Service {
         super.onDestroy();
 
         // 이벤트 버스 해제
-//        EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
 
         // 렘 닫기
         mRealm.close();
     }
-
 
 
     @Override
@@ -146,12 +154,16 @@ public class MusicService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             if (ACTION_PLAY.equals(action)) {
+                mPlayModeDefaultIs1andFavoriteIs2 = 1;
+
                 requestAudioFocus();
 
                 // 방법1 : id
 //                playMusicList(intent.getIntExtra("id", -1));
 
-                getSongUriFromRealm();
+                getSongUriFromRealm(1);
+
+
                 // 방법2 : uri
                 Uri uri = Uri.parse(intent.getStringExtra("uri"));
                 int position = intent.getIntExtra("position", -1);
@@ -165,6 +177,17 @@ public class MusicService extends Service {
                 prevMusic3();
             } else if (ACTION_NEXT.equals(action) && mMediaPlayer != null) {
                 nextMusic3();
+            } else if (ACTION_FAVORITE_PLAY.equals(action)) {
+                mPlayModeDefaultIs1andFavoriteIs2 = 2;
+
+                requestAudioFocus();
+                getSongUriFromRealm(2);
+
+                Uri uri = Uri.parse(intent.getStringExtra("uri"));
+                int position = intent.getIntExtra("position", -1);
+
+                playMusicList2(uri, position);
+
             }
         }
         return START_STICKY;
@@ -216,6 +239,14 @@ public class MusicService extends Service {
         return currentUri;
     }
 
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public int getCurrentId() {
+        return currentId;
+    }
+
 
     public boolean isPlaying() {
         if (mMediaPlayer != null) {
@@ -261,7 +292,11 @@ public class MusicService extends Service {
 
     public void nextMusic3() {
 
-        getSongUriFromRealm();
+        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
+            getSongUriFromRealm(1);
+        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
+            getSongUriFromRealm(2);
+        }
 
         mIndex++;
         if (mIndex > mSongUriList.size() - 1) {
@@ -273,8 +308,12 @@ public class MusicService extends Service {
 
     public void prevMusic3() {
 
+        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
+            getSongUriFromRealm(1);
+        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
+            getSongUriFromRealm(2);
+        }
 
-        getSongUriFromRealm();
 
         mIndex--;
         if (mIndex < 0) {
@@ -289,6 +328,7 @@ public class MusicService extends Service {
     private void playMusicList2(final Uri uri, final int index) {
         try {
             currentUri = uri;
+            currentIndex = index;
 
             // 현재 재생중인 정보
             mRetriever = new MediaMetadataRetriever();
@@ -457,9 +497,8 @@ public class MusicService extends Service {
     }
 
 
-
     // 렘 -> 어레이리스트로 바꾸기
-    public ArrayList<MusicFile> getModelList() {
+    public ArrayList<MusicFile> getModelList1() {
         ArrayList<MusicFile> list = new ArrayList<>();
         Realm realm = null;
         try {
@@ -476,25 +515,80 @@ public class MusicService extends Service {
         return list;
     }
 
-    public void getSongUriFromRealm() {
+    public ArrayList<FavoriteMusicFile> getModelList2() {
+        ArrayList<FavoriteMusicFile> list = new ArrayList<>();
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            RealmResults<FavoriteMusicFile> results = realm
+                    .where(FavoriteMusicFile.class)
+                    .findAll();
+            list.addAll(realm.copyFromRealm(results));
+        } finally {
+            if (realm != null) {
+                realm.close();
+            }
+        }
+        return list;
+    }
 
-        ArrayList<MusicFile> arrayList = new ArrayList<>();
-        arrayList = getModelList();
+
+    public void getSongUriFromRealm(int mode) {
+
+        switch (mode) {
+            case 1:
+                ArrayList<MusicFile> arrayList1 = new ArrayList<>();
+                arrayList1 = getModelList1();
 
 //        ArrayList<String> temp = new ArrayList<String>();
 //        temp.clear();
 
-        // mSongUriList.clear();
-        mSongUriList.clear();
+                // mSongUriList.clear();
+                mSongUriList.clear();
 
-        for (MusicFile musicFile : arrayList) {
-            mSongUriList.add(Uri.parse(musicFile.getUri()));
+                for (MusicFile musicFile : arrayList1) {
+                    mSongUriList.add(Uri.parse(musicFile.getUri()));
 //            temp.add(musicFile.getUri());
-        }
+                }
 
 //        Toast.makeText(this, "렘 어레이리스트로 바꾼 크기" + arrayList.size()
 //                + "\n mSongUriList에 담긴 크기 " + mSongUriList.size(), Toast.LENGTH_SHORT).show();
 //        setStringArrayPref(this, "uriList", temp);
+
+                break;
+
+            case 2:
+                ArrayList<FavoriteMusicFile> arrayList2 = new ArrayList<>();
+                arrayList2 = getModelList2();
+
+                mSongUriList.clear();
+
+                for (FavoriteMusicFile favoriteMusicFile : arrayList2) {
+                    mSongUriList.add(Uri.parse(favoriteMusicFile.getUri()));
+                }
+
+                break;
+
+            default:
+                break;
+
+        }
+
+    }
+
+    // TODO 플레이 모드 변경시
+    @Subscribe
+    public void getChangedPlayMode(MyUtils.changePlayModeEvent event) {
+        Toast.makeText(this, "변경된 플레이모드 " + event.playMode, Toast.LENGTH_SHORT).show();
+        String playMode = event.playMode;
+        if (playMode.equals("repeat")) {
+            getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+        } else if (playMode.equals("shuffle")) {
+
+        } else if (playMode.equals("play_one")) {
+
+        }
+
     }
 
 }

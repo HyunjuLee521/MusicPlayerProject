@@ -1,6 +1,9 @@
 package com.hj.user.musicplayerproject.fragments.MainFragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -310,20 +313,6 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     public void editPlaylist(Integer integer) {
 
         switch (integer) {
-            case 2:
-                // 위로
-                moveUpSelectedItem();
-
-                int size = mRealm.where(MusicFile.class).findAll().size();
-                Toast.makeText(getContext(), "MusicFile.class 의 크기 " + size, Toast.LENGTH_SHORT).show();
-
-                mAdapter2.notifyDataSetChanged();
-                mRecyclerview.setAdapter(mAdapter2);
-
-
-
-                break;
-
 
             case 4:
                 // 삭제시
@@ -367,13 +356,11 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
     }
 
     private void deleteSelectedItem() {
-//        for (final int position : mEditPlaylistSelectedId) {
 
         // 1. 렘에서 지우기
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-
 
                 // 해당 포지션의 아이템 렘에서 지우기
 //                    List<Integer> myList = new ArrayList<Integer>();
@@ -388,43 +375,87 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-//        }
-
-
         // clear
         mEditPlaylistSelectedId.clear();
         mEditPlaylistSelectedUri.clear();
-//        mEditPlaylistSelectedPosition.clear();
+        mEditPlaylistSelectedPosition.clear();
 
         mAdapter2.clearSelection();
 
     }
 
 
-    private void moveUpSelectedItem() {
 
+
+
+    // uri값 받아와서
+    // Realm 테이블 MusicFile에 저장
+    public void getSongToPlaylist(Uri uri) {
+
+        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+//        retriever.setDataSource(MyUtils.getRealPath(this, uri));
+        retriever.setDataSource(getContext(), uri);
+
+        // 미디어 정보
+        final String mUri = uri.toString();
+        final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
+
+        // 오디오 앨범 자켓 이미지
+        // bitmap -> String으로 변환하여 저장
+        final byte[] image2;
+
+
+//             오디오 앨범 자켓 이미지
+        byte albumImage[] = retriever.getEmbeddedPicture();
+        if (null != albumImage) {
+            // 바이트 -> 비트맵
+            Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
+            // 비트맵 -> String
+            image2 = albumImage;
+
+        } else {
+            image2 = null;
+
+        }
+
+
+        // 렘에 저장
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+
+                MusicFile musicFile = mRealm.createObject(MusicFile.class);
+
+                musicFile.setUri(mUri);
+                musicFile.setArtist(artist);
+                musicFile.setTitle(title);
+                musicFile.setDuration(duration);
+                musicFile.setImage2(image2);
+
+
+                Number currentIdNum = mRealm.where(MusicFile.class).max("id");
+                int nextId;
+                if (currentIdNum == null) {
+                    nextId = 0;
+                } else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+                musicFile.setId(nextId);
+                mRealm.insertOrUpdate(musicFile); // using insert API
 
 
             }
         });
 
 
-        // clear
-        mEditPlaylistSelectedId.clear();
-        mEditPlaylistSelectedUri.clear();
-//        mEditPlaylistSelectedPosition.clear();
+        if (mRealm.where(MusicFile.class).count() > 0) {
+            MusicFile musicFile = mRealm.where(MusicFile.class).findFirst();
 
-        mAdapter2.clearSelection();
 
-    }
-
-    private void moveDownSelectedItem() {
-
+        }
 
     }
-
 
 }
