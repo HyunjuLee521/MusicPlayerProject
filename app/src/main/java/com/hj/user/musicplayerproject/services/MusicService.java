@@ -25,6 +25,7 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -73,6 +74,7 @@ public class MusicService extends Service {
     private int mIndex = 0;
 
     private int mPlayModeDefaultIs1andFavoriteIs2;
+    private String playMode;
 
 
     @Override
@@ -134,6 +136,8 @@ public class MusicService extends Service {
         // mSongLIst 초기화
         mSongUriList = new ArrayList<Uri>();
 
+        playMode = "repeat";
+
 
     }
 
@@ -154,39 +158,61 @@ public class MusicService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             if (ACTION_PLAY.equals(action)) {
+                requestAudioFocus();
                 mPlayModeDefaultIs1andFavoriteIs2 = 1;
 
-                requestAudioFocus();
+//                getSongUriFromRealm(1);
 
-                // 방법1 : id
-//                playMusicList(intent.getIntExtra("id", -1));
-
-                getSongUriFromRealm(1);
-
+                if (playMode.equals("shuffle")) {
+                    getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+                } else if (playMode.equals("play_one")) {
+                    getRepeatOneSongUri();
+                } else {
+                    getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+                }
 
                 // 방법2 : uri
-                Uri uri = Uri.parse(intent.getStringExtra("uri"));
+                currentUri = Uri.parse(intent.getStringExtra("uri"));
                 int position = intent.getIntExtra("position", -1);
 
-                playMusicList2(uri, position);
+                playMusicList2(currentUri, position);
 
 
             } else if (ACTION_RESUME.equals(action) && mMediaPlayer != null) {
+                if (playMode.equals("shuffle")) {
+                    getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+                } else if (playMode.equals("play_one")) {
+                    getRepeatOneSongUri();
+                } else {
+                    getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+                }
+
                 clickResumeButton();
             } else if (ACTION_PREV.equals(action) && mMediaPlayer != null) {
+
                 prevMusic3();
             } else if (ACTION_NEXT.equals(action) && mMediaPlayer != null) {
+
+
                 nextMusic3();
             } else if (ACTION_FAVORITE_PLAY.equals(action)) {
+                requestAudioFocus();
                 mPlayModeDefaultIs1andFavoriteIs2 = 2;
 
-                requestAudioFocus();
-                getSongUriFromRealm(2);
+//                getSongUriFromRealm(2);
 
-                Uri uri = Uri.parse(intent.getStringExtra("uri"));
+                if (playMode.equals("shuffle")) {
+                    getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+                } else if (playMode.equals("play_one")) {
+                    getRepeatOneSongUri();
+                } else {
+                    getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+                }
+
+                currentUri = Uri.parse(intent.getStringExtra("uri"));
                 int position = intent.getIntExtra("position", -1);
 
-                playMusicList2(uri, position);
+                playMusicList2(currentUri, position);
 
             }
         }
@@ -292,10 +318,18 @@ public class MusicService extends Service {
 
     public void nextMusic3() {
 
-        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
-            getSongUriFromRealm(1);
-        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
-            getSongUriFromRealm(2);
+//        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
+//            getSongUriFromRealm(1);
+//        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
+//            getSongUriFromRealm(2);
+//        }
+
+        if (playMode.equals("shuffle")) {
+            getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+        } else if (playMode.equals("play_one")) {
+            getRepeatOneSongUri();
+        } else {
+            getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
         }
 
         mIndex++;
@@ -308,12 +342,19 @@ public class MusicService extends Service {
 
     public void prevMusic3() {
 
-        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
-            getSongUriFromRealm(1);
-        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
-            getSongUriFromRealm(2);
-        }
+//        if (mPlayModeDefaultIs1andFavoriteIs2 == 1) {
+//            getSongUriFromRealm(1);
+//        } else if (mPlayModeDefaultIs1andFavoriteIs2 == 2) {
+//            getSongUriFromRealm(2);
+//        }
 
+        if (playMode.equals("shuffle")) {
+            getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+        } else if (playMode.equals("play_one")) {
+            getRepeatOneSongUri();
+        } else {
+            getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+        }
 
         mIndex--;
         if (mIndex < 0) {
@@ -537,6 +578,7 @@ public class MusicService extends Service {
 
         switch (mode) {
             case 1:
+                // 모드 1 - 재생목록
                 ArrayList<MusicFile> arrayList1 = new ArrayList<>();
                 arrayList1 = getModelList1();
 
@@ -558,6 +600,7 @@ public class MusicService extends Service {
                 break;
 
             case 2:
+                // 모드 2 - 즐겨찾기
                 ArrayList<FavoriteMusicFile> arrayList2 = new ArrayList<>();
                 arrayList2 = getModelList2();
 
@@ -579,16 +622,73 @@ public class MusicService extends Service {
     // TODO 플레이 모드 변경시
     @Subscribe
     public void getChangedPlayMode(MyUtils.changePlayModeEvent event) {
-        Toast.makeText(this, "변경된 플레이모드 " + event.playMode, Toast.LENGTH_SHORT).show();
-        String playMode = event.playMode;
-        if (playMode.equals("repeat")) {
-            getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
-        } else if (playMode.equals("shuffle")) {
+//        Toast.makeText(this, "변경된 플레이모드 " + event.playMode, Toast.LENGTH_SHORT).show();
+        playMode = event.playMode;
+//        if (playMode.equals("repeat")) {
+//            getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+//
+//        } else if (playMode.equals("shuffle")) {
+//            getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
+//
+//        } else if (playMode.equals("play_one")) {
+//            getRepeatOneSongUri();
+//        }
 
-        } else if (playMode.equals("play_one")) {
+    }
 
+    // 한곡 반복
+    private void getRepeatOneSongUri() {
+        mSongUriList.clear();
+        mSongUriList.add(currentUri);
+    }
+
+    // 셔플
+    private void getShuffleSongUri(int mPlayModeDefaultIs1andFavoriteIs2) {
+        getSongUriFromRealm(mPlayModeDefaultIs1andFavoriteIs2);
+
+        int size = mSongUriList.size();
+        ArrayList<Integer> orderedArraylist = new ArrayList<>(size);
+
+        int randomIndex;
+        boolean isValid;
+
+        while (orderedArraylist.size() < size) {
+            do {
+                Random random = new Random();
+                randomIndex = random.nextInt(size);
+
+                if (orderedArraylist.contains((Integer) randomIndex)) {
+                    isValid = false;
+                } else {
+                    isValid = true;
+                    orderedArraylist.add(randomIndex);
+                }
+
+            } while (!isValid);
         }
 
+
+//            Toast.makeText(this, "어레이리스트 size " + orderedArraylist.size()
+//                    + "\n 어레이리스트 toString " + orderedArraylist.toString(), Toast.LENGTH_SHORT).show();
+
+
+        ArrayList<Uri> newSongUriList = new ArrayList<>();
+        for (int i = 0; i < mSongUriList.size(); i++) {
+            int randomOrder = orderedArraylist.get(i);
+            newSongUriList.add(mSongUriList.get(randomOrder));
+        }
+
+
+        mSongUriList.clear();
+        orderedArraylist.clear();
+
+        for (int i = 0; i < newSongUriList.size(); i++) {
+            mSongUriList.add(newSongUriList.get(i));
+        }
+
+        newSongUriList.clear();
+
+        Toast.makeText(this, "mSongUriList.toString " + mSongUriList.toString(), Toast.LENGTH_SHORT).show();
     }
 
 }
