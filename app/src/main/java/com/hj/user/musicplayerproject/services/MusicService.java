@@ -1,19 +1,30 @@
 package com.hj.user.musicplayerproject.services;
 
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v7.app.NotificationCompat;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.hj.user.musicplayerproject.R;
+import com.hj.user.musicplayerproject.activities.MainActivity;
 import com.hj.user.musicplayerproject.models.FavoriteMusicFile;
 import com.hj.user.musicplayerproject.models.MusicFile;
 import com.hj.user.musicplayerproject.utils.MyUtils;
@@ -75,6 +86,7 @@ public class MusicService extends Service {
 
     private int mPlayModeDefaultIs1andFavoriteIs2;
     private String playMode;
+    private MediaSessionCompat mSession;
 
 
     @Override
@@ -427,13 +439,147 @@ public class MusicService extends Service {
                 }
             });
 
-//            // foreground service
+            // foreground service
 //            showNotification();
+
+            getLolliNotification();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void showNotification() {
+        String title = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        String artist = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//        builder.setContentTitle(title);
+//        builder.setContentText(artist);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.remote_view);
+        remoteViews.setTextViewText(R.id.title_text, title);
+        remoteViews.setTextViewText(R.id.artist_text, artist);
+
+        builder.setCustomContentView(remoteViews);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(
+                getResources(), R.mipmap.ic_launcher);
+
+//        builder.setLargeIcon(bitmap);
+
+        remoteViews.setImageViewBitmap(R.id.album_image, bitmap);
+
+        // 알림을 클릭하면 수행될 인텐트
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        // 클릭하면 날리기
+        builder.setAutoCancel(true);
+
+        // 색상
+        builder.setColor(Color.YELLOW);
+
+        // 기본 알림음
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(uri);
+
+        // 진동
+        builder.setVibrate(new long[]{100, 200, 300});
+
+        Intent stopIntent = new Intent(this, MusicService.class);
+        stopIntent.setAction(ACTION_RESUME);
+        PendingIntent stopPendingIntent = PendingIntent.getService(this,
+                1, stopIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        // 액션
+//        builder.addAction(R.mipmap.ic_launcher, "중지", stopPendingIntent);
+//        builder.addAction(R.mipmap.ic_launcher, "다음곡", pendingIntent);
+//        builder.addAction(R.mipmap.ic_launcher, "이전곡", pendingIntent);
+
+        // 알림 표시
+        startForeground(1, builder.build());
+
+
+    }
+
+
+    private void getLolliNotification() {
+
+        String title = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        String artist = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+        MediaMetadataCompat metadataCompat = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
+                .build();
+
+        if (mSession == null) {
+            mSession = new MediaSessionCompat(this, "tag", null, null);
+            mSession.setMetadata(metadataCompat);
+            mSession.setActive(true);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                this);
+        builder.setShowWhen(false);
+        builder.setStyle(new NotificationCompat.MediaStyle()
+                .setMediaSession(mSession.getSessionToken())
+                .setShowActionsInCompactView(0, 1, 2));
+        builder.setColor(Color.parseColor("#2196F3"));
+
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setContentTitle(title);
+        builder.setContentText(artist);
+
+
+//        if (mSession == null) {
+//            mSession = new MediaSessionCompat(this, "tag", null, null);
+//            mSession.setMetadata(metadataCompat);
+//        }
+
+        Intent stopIntent = new Intent(this, MusicService.class);
+        stopIntent.setAction("stop");
+
+        PendingIntent pendingIntent = PendingIntent.getService
+                (this, 1, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+//        builder.setContentTitle(metadataCompat.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
+//        builder.setContentText(metadataCompat.getString(MediaMetadataCompat.METADATA_KEY_ARTIST));
+//        builder.setSmallIcon(R.drawable.ic_audiotrack_black_24dp);
+//        builder.setShowWhen(false);
+//
+//        MediaSessionCompat mSession;
+//
+//
+//        builder.setStyle(new NotificationCompat.MediaStyle()
+//                .setMediaSession(mSession.getSessionToken())
+//                .setShowActionsInCompactView(0, 1, 2)
+//                .setShowCancelButton(true));
+//        builder.setColor(0xFFDB4437);
+
+
+        //builder.setLargeIcon(metadataCompat.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART));
+        builder.addAction(R.drawable.ic_fast_rewind_black_24dp, "prew", null);
+        builder.addAction(R.drawable.ic_pause_circle_outline_black_24dp, "pause", null);
+        builder.addAction(R.drawable.ic_fast_forward_black_24dp, "next", null);
+
+        // 본체 눌렀을때 동작 설정
+        Intent launchMusicActivity = new Intent(this, MainActivity.class);
+        PendingIntent sender = PendingIntent.getActivity(this, 1, launchMusicActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(sender);
+
+
+        // builder.setStyle(new NotificationCompat.Style())
+//        return builder.build();
+
+
+        startForeground(1, builder.build());
     }
 
 
