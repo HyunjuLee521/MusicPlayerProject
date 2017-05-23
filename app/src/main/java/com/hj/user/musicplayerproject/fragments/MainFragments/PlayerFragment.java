@@ -160,9 +160,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             mService = binder.getService();
             mBound = true;
 
-
 //            // UI 갱신
-//            updateUI2(mService.isPlaying());
+            updateUI2(mService.isPlaying());
         }
 
         @Override
@@ -197,21 +196,23 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     @Subscribe
     public void updateUI2(Boolean isPlaying) {
 
-        if (uri == null || uri != mService.getCurrentUri()) {
+        if (isPlaying) {
 
-            MediaMetadataRetriever retriever = mService.getMetaDataRetriever();
-            // 미디어 정보
+            if (uri == null || uri != mService.getCurrentUri()) {
+
+                MediaMetadataRetriever retriever = mService.getMetaDataRetriever();
+                // 미디어 정보
 //        final String mUri = uri.toString();
-            final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-            final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
-            final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
+                final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+                final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+                final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
 
-            // 오디오 앨범 자켓 이미지
-            // bitmap -> String으로 변환하여 저장
+                // 오디오 앨범 자켓 이미지
+                // bitmap -> String으로 변환하여 저장
 //        final String image;
 
 
-            byte albumImage[] = retriever.getEmbeddedPicture();
+                byte albumImage[] = retriever.getEmbeddedPicture();
 
 //        if (null != albumImage) {
 //            Bitmap bitmap = BitmapFactory.decodeByteArray(albumImage, 0, albumImage.length);
@@ -220,31 +221,31 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 //            mAlbumImageview.setImageBitmap(bitmap);
 //        }
 
-            if (null != albumImage) {
-                Glide.with(this).load(albumImage).into(mAlbumImageview);
-            } else {
-                Glide.with(this).load(R.mipmap.ic_launcher).into(mAlbumImageview);
-            }
+                if (null != albumImage) {
+                    Glide.with(this).load(albumImage).into(mAlbumImageview);
+                } else {
+                    Glide.with(this).load(R.mipmap.ic_launcher).into(mAlbumImageview);
+                }
 
 
-            mTitleTextveiw.setText(title);
-            mArtistTextview.setText(artist);
+                mTitleTextveiw.setText(title);
+                mArtistTextview.setText(artist);
 
-            // TODO
-            if (isPlaying) {
-                if (retriever != null) {
-                    // ms값
-                    int longDuration = mService.getMediaPlayer().getDuration();
+                // TODO
+                if (isPlaying) {
+                    if (retriever != null) {
+                        // ms값
+                        int longDuration = mService.getMediaPlayer().getDuration();
 
-                    int min = longDuration / 1000 / 60;
-                    int sec = longDuration / 1000 % 60;
+                        int min = longDuration / 1000 / 60;
+                        int sec = longDuration / 1000 % 60;
 
-                    mEndTimeTextview.setText(String.format(Locale.KOREA, "%d:%02d", min, sec));
+                        mEndTimeTextview.setText(String.format(Locale.KOREA, "%d:%02d", min, sec));
 
 //                    mSeekbar.setMax(longDuration);
-                    startCountdown();
+                        startCountdown();
+                    }
                 }
-            }
 
 //            RealmQuery<FavoriteMusicFile> a = mRealm.where(FavoriteMusicFile.class);
 //            RealmQuery<FavoriteMusicFile> b = a.equalTo("uri", uri.toString());
@@ -252,19 +253,19 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 //            int d = c.size();
 
 
-        }
+            }
 
-        uri = mService.getCurrentUri();
+            uri = mService.getCurrentUri();
 
-        boolean itemIsFavorite = false;
+            boolean itemIsFavorite = false;
 
-        if (mRealm.where(FavoriteMusicFile.class)
-                .equalTo("uri", uri.toString())
-                .findAll()
-                .size() > 0 &&
-                mRealm.where(FavoriteMusicFile.class) != null) {
-            itemIsFavorite = true;
-        }
+            if (mRealm.where(FavoriteMusicFile.class)
+                    .equalTo("uri", uri.toString())
+                    .findAll()
+                    .size() > 0 &&
+                    mRealm.where(FavoriteMusicFile.class) != null) {
+                itemIsFavorite = true;
+            }
 
 
 //        Toast.makeText(getActivity(), "좋아요 플레이리스트 렘에 들어간 갯수 "
@@ -273,20 +274,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 //                        .size(),
 //                Toast.LENGTH_SHORT).show();
 
-        if (itemIsFavorite) {
+            if (itemIsFavorite) {
 //                mHeartImageview.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 
 //            Toast.makeText(getActivity(), "좋아요 되어있음", Toast.LENGTH_SHORT).show();
-            Glide.with(this).load(R.drawable.like_black).into(mHeartImageview);
+                Glide.with(this).load(R.drawable.like_black).into(mHeartImageview);
 
 
-        } else {
+            } else {
 //                mHeartImageview.setImageResource(R.drawable.like_black);
 //            Toast.makeText(getActivity(), "좋아요 되어있지않음", Toast.LENGTH_SHORT).show();
-            Glide.with(this).load(R.drawable.like_white).into(mHeartImageview);
+                Glide.with(this).load(R.drawable.like_white).into(mHeartImageview);
 
+            }
         }
-
 
     }
 

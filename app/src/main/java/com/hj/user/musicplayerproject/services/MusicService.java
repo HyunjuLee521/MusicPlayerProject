@@ -644,7 +644,7 @@ public class MusicService extends Service {
         // TODO 본체 눌렀을때 동작 설정 (PlayerFragment)
         Intent launchMusicActivity = new Intent(this, MainActivity.class);
         launchMusicActivity.setAction(MainActivity.ACTION_RESTART_MAIN);
-        PendingIntent sender = PendingIntent.getActivity(this, 1, launchMusicActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent sender = PendingIntent.getActivity(this, 0, launchMusicActivity, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(sender);
 
 

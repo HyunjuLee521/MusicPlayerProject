@@ -41,12 +41,6 @@ public class EditControllerFragment extends Fragment implements View.OnClickList
         mDeleteLinearlayout = (LinearLayout) view.findViewById(R.id.delete_linearlayout);
         mDeleteLinearlayout.setOnClickListener(this);
 
-        mUpLinearlayout = (LinearLayout) view.findViewById(R.id.up_linearlayout);
-        mUpLinearlayout.setOnClickListener(this);
-
-        mDownLinearlayout = (LinearLayout) view.findViewById(R.id.down_linearlayout);
-        mDownLinearlayout.setOnClickListener(this);
-
     }
 
     @Override
