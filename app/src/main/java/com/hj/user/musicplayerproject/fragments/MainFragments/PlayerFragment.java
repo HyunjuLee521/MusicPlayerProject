@@ -9,15 +9,18 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.hj.user.musicplayerproject.R;
@@ -30,9 +33,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by USER on 2017-03-22.
@@ -60,6 +66,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
 
 
     private String mPlayMode;
+
+
+    private static final int SEC = 1000;
+    private CountDownTimer progressTimer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +111,32 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         mHeartImageview.setOnClickListener(this);
         mRepaeatImageview.setOnClickListener(this);
 
+        mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser && mService.getMediaPlayer() != null) {
+                    mService.getMediaPlayer().seekTo(progress * SEC);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // 드래그 멈출때
+                // mService.getMediaPlayer().pause();
+
+                //  allowProgressUpdates = false;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // 최초 탭해서 드래그 시작할때
+                if (mService.getMediaPlayer() != null) {
+                    mService.getMediaPlayer().seekTo(seekBar.getProgress());
+                }
+                //  allowProgressUpdates = true;
+            }
+        });
+
 
     }
 
@@ -124,12 +160,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             mService = binder.getService();
             mBound = true;
 
+
 //            // UI 갱신
-//            updateUI(mService.isPlaying());
+//            updateUI2(mService.isPlaying());
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
+
+            cancelCountdown();
             mBound = false;
         }
     };
@@ -144,12 +183,22 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    @Subscribe
+    public void restartMainUpdateUI(MyUtils.restartUpdateUiEvent event) {
+        boolean isPlaying = event.isPlaying;
+        Toast.makeText(getContext(), "updatdUi 이벤트버스 도착, isPlaying 값 " + isPlaying, Toast.LENGTH_SHORT).show();
+
+        updateUI2(isPlaying);
+    }
+
+
     Uri uri;
 
     @Subscribe
     public void updateUI2(Boolean isPlaying) {
 
         if (uri == null || uri != mService.getCurrentUri()) {
+
             MediaMetadataRetriever retriever = mService.getMetaDataRetriever();
             // 미디어 정보
 //        final String mUri = uri.toString();
@@ -182,8 +231,20 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
             mArtistTextview.setText(artist);
 
             // TODO
-            mEndTimeTextview.setText(duration);
+            if (isPlaying) {
+                if (retriever != null) {
+                    // ms값
+                    int longDuration = mService.getMediaPlayer().getDuration();
 
+                    int min = longDuration / 1000 / 60;
+                    int sec = longDuration / 1000 % 60;
+
+                    mEndTimeTextview.setText(String.format(Locale.KOREA, "%d:%02d", min, sec));
+
+//                    mSeekbar.setMax(longDuration);
+                    startCountdown();
+                }
+            }
 
 //            RealmQuery<FavoriteMusicFile> a = mRealm.where(FavoriteMusicFile.class);
 //            RealmQuery<FavoriteMusicFile> b = a.equalTo("uri", uri.toString());
@@ -306,8 +367,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
                 }
 
 
-
-
                 break;
 
             default:
@@ -414,6 +473,61 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
         });
 
 
+    }
+
+
+    private void startCountdown() {
+        if (progressTimer != null) {
+            progressTimer.cancel();
+        }
+
+        final int position = mService.getMediaPlayer().getCurrentPosition();
+        final int duration = mService.getMediaPlayer().getDuration();
+
+        mSeekbar.setIndeterminate(duration == -1);
+        mSeekbar.setMax(duration);
+
+        progressTimer = new CountDownTimer(duration - position, SEC) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if (mService.getMediaPlayer() != null) {
+
+                    int currentPosition = mService.getMediaPlayer().getCurrentPosition();
+
+                    // TODO 안변함
+                    mSeekbar.setProgress(currentPosition);
+                    Log.d(TAG, "onTick: " + currentPosition + " 맥스값 : " + mSeekbar.getMax());
+
+                    // if (allowProgressUpdates) {
+                    //   mSeekBar.setProgress((duration - (int) millisUntilFinished) / SEC);
+                    // }
+
+                    int min = currentPosition / SEC / 60;
+                    int sec = currentPosition / SEC % 60;
+                    mStartTimeTextview.setText(String.format(Locale.KOREA, "%d:%02d", min, sec));
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                progressTimer = null;
+                mSeekbar.setProgress(0);
+                mSeekbar.setMax(0);
+            }
+        }.start();
+    }
+
+    private void cancelCountdown() {
+        if (progressTimer != null) {
+            progressTimer.cancel();
+            progressTimer = null;
+        }
+        int position = mService.getMediaPlayer().getCurrentPosition();
+        final int duration = mService.getMediaPlayer().getDuration();
+
+        mSeekbar.setIndeterminate(false);
+        mSeekbar.setProgress(position / SEC);
+        mSeekbar.setMax(duration / SEC);
     }
 
 

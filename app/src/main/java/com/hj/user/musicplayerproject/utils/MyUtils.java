@@ -24,9 +24,9 @@ public class MyUtils {
             this.positionArrayList = positionArrayList;
 
         }
+
         public ArrayList<Integer> positionArrayList;
     }
-
 
 
     public static class changePlayModeEvent {
@@ -38,6 +38,31 @@ public class MyUtils {
     }
 
 
+    public static class finishEvent {
+        public finishEvent(int doFinish) {
+            this.doFinish = doFinish;
+        }
+
+        public int doFinish;
+    }
+
+    public static class restartMainEvent {
+        public restartMainEvent(int doRestart) {
+            this.doRestart = doRestart;
+        }
+
+        public int doRestart;
+    }
+
+
+    public static class restartUpdateUiEvent {
+
+        public restartUpdateUiEvent(boolean isPlaying) {
+            this.isPlaying = isPlaying;
+        }
+
+        public boolean isPlaying;
+    }
 
 
 }

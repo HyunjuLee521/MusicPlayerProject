@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -17,6 +18,7 @@ import com.hj.user.musicplayerproject.fragments.MainFragments.FavoritePlaylistFr
 import com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment;
 import com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment;
 import com.hj.user.musicplayerproject.fragments.MainFragments.PlaylistFragment;
+import com.hj.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,11 +31,23 @@ public class MainActivity extends AppCompatActivity {
     private FavoritePlaylistFragment mFavoritePlaylistFragment;
 
     private ViewPager viewPager;
+    private TabLayout tabLayout;
+
+    public static String ACTION_RESTART_MAIN = "restart_main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (getIntent() != null && getIntent().getAction().equals(ACTION_RESTART_MAIN)) {
+            /**
+             * {@link com.hj.user.musicplayerproject.services.MusicService#getRestartMainSignal(MyUtils.restartMainEvent)}
+             */
+            MyUtils.restartMainEvent event = new MyUtils.restartMainEvent(1);
+            EventBus.getDefault().post(event);
+        }
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,11 +57,14 @@ public class MainActivity extends AppCompatActivity {
         mFavoritePlaylistFragment = new FavoritePlaylistFragment();
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
+        tabLayout = (TabLayout) findViewById(R.id.main_tablayout);
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
         viewPager.setOffscreenPageLimit(3);
+
+        tabLayout.setupWithViewPager(viewPager);
 
 
         // 처음에 띄어줄 화면
@@ -109,12 +126,26 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
 
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "플레이어";
+                case 1:
+                    return "재생목록";
+                case 2:
+                    return "즐겨찾기";
+            }
+            return null;
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         mPlaylistFragment.scrollDown();
+
+
     }
 
     @Override
@@ -127,7 +158,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+
     }
+
+
+
 
 
     @Override
@@ -154,5 +189,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+    @Subscribe
+    public void finishMainActivity (MyUtils.finishEvent event) {
+        finish();
+    }
+
+
+
 
 }

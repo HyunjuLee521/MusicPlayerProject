@@ -47,6 +47,8 @@ import io.realm.RealmResults;
 
 public class MusicService extends Service {
 
+    private static final String ACTION_CLOSE = "close";
+    public static final int DO_FINISH = 1;
     // PlaylistFragment
     // 리스트뷰에서 아이템(곡) 클릭
     public static String ACTION_PLAY = "play";
@@ -60,7 +62,6 @@ public class MusicService extends Service {
     public static String ACTION_PREV = "prev";
     // 오른쪽 버튼(>> : 다음곡) 클릭
     public static String ACTION_NEXT = "next";
-
 
     private MediaPlayer mMediaPlayer;
     private MediaMetadataRetriever mRetriever;
@@ -106,11 +107,11 @@ public class MusicService extends Service {
             @Override
             public void onAudioFocusChange(int focusChange) {
 
-                Toast.makeText(MusicService.this, "포커스가 변경되었다", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MusicService.this, "포커스가 변경되었다", Toast.LENGTH_SHORT).show();
 
                 switch (focusChange) {
                     case AudioManager.AUDIOFOCUS_GAIN:
-                        Toast.makeText(MusicService.this, "포커스체인지 얻었다", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MusicService.this, "포커스체인지 얻었다", Toast.LENGTH_SHORT).show();
                         break;
 
                     case AudioManager.AUDIOFOCUS_LOSS:
@@ -118,13 +119,15 @@ public class MusicService extends Service {
 //                        mMediaPlayer.release();
 //                        mMediaPlayer = null;
 
-                        mMediaPlayer.pause();
+                        if (mMediaPlayer != null) {
+                            mMediaPlayer.pause();
+                        }
 
                         /**
                          * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateResumeImageview(Boolean)}
                          */
                         EventBus.getDefault().post(isPlaying());
-                        Toast.makeText(MusicService.this, "포커스를 잃었다", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(MusicService.this, "포커스를 잃었다", Toast.LENGTH_SHORT).show();
 
                         break;
 
@@ -169,7 +172,29 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
-            if (ACTION_PLAY.equals(action)) {
+
+            if (ACTION_CLOSE.equals(action)) {
+                // TODO 끝내기
+//                Toast.makeText(this, "클로즈", Toast.LENGTH_SHORT).show();
+
+                if (mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.stop();
+                    mMediaPlayer.release();
+                    mMediaPlayer = null;
+                } else {
+                    mMediaPlayer.release();
+                    mMediaPlayer = null;
+                }
+
+                // 메인 액티비티 죽이기
+                MyUtils.finishEvent event = new MyUtils.finishEvent(DO_FINISH);
+                EventBus.getDefault().post(event);
+
+                stopForeground(true);
+                stopService(new Intent(this, MusicService.class));
+
+
+            } else if (ACTION_PLAY.equals(action)) {
                 requestAudioFocus();
                 mPlayModeDefaultIs1andFavoriteIs2 = 1;
 
@@ -191,6 +216,8 @@ public class MusicService extends Service {
 
 
             } else if (ACTION_RESUME.equals(action) && mMediaPlayer != null) {
+                getLolliNotification();
+
                 if (playMode.equals("shuffle")) {
                     getShuffleSongUri(mPlayModeDefaultIs1andFavoriteIs2);
                 } else if (playMode.equals("play_one")) {
@@ -201,11 +228,13 @@ public class MusicService extends Service {
 
                 clickResumeButton();
             } else if (ACTION_PREV.equals(action) && mMediaPlayer != null) {
+//                Toast.makeText(this, "액션 프리브", Toast.LENGTH_SHORT).show();
 
                 prevMusic3();
             } else if (ACTION_NEXT.equals(action) && mMediaPlayer != null) {
 
 
+//                Toast.makeText(this, "액션 넥트스", Toast.LENGTH_SHORT).show();
                 nextMusic3();
             } else if (ACTION_FAVORITE_PLAY.equals(action)) {
                 requestAudioFocus();
@@ -508,14 +537,22 @@ public class MusicService extends Service {
     }
 
 
+    public Bitmap byteArrayToBitmap(byte[] byteArray) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        return bitmap;
+    }
+
+
     private void getLolliNotification() {
 
         String title = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
         String artist = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        Bitmap album = byteArrayToBitmap(mRetriever.getEmbeddedPicture());
 
         MediaMetadataCompat metadataCompat = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, album)
                 .build();
 
         if (mSession == null) {
@@ -532,7 +569,9 @@ public class MusicService extends Service {
                 .setShowActionsInCompactView(0, 1, 2));
         builder.setColor(Color.parseColor("#2196F3"));
 
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_audiotrack_black_24dp);
+
+        builder.setLargeIcon(album);
         builder.setContentTitle(title);
         builder.setContentText(artist);
 
@@ -542,11 +581,36 @@ public class MusicService extends Service {
 //            mSession.setMetadata(metadataCompat);
 //        }
 
-        Intent stopIntent = new Intent(this, MusicService.class);
-        stopIntent.setAction("stop");
+        // 0 prev
+        Intent prevIntent = new Intent(this, MusicService.class);
+        prevIntent.setAction(ACTION_PREV);
 
-        PendingIntent pendingIntent = PendingIntent.getService
-                (this, 1, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent prevPendingIntent = PendingIntent.getService
+                (this, 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        // 1 resume
+        Intent resumeIntent = new Intent(this, MusicService.class);
+        resumeIntent.setAction(ACTION_RESUME);
+
+        PendingIntent resumePendingIntent = PendingIntent.getService
+                (this, 1, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // 2 next
+        Intent nextIntent = new Intent(this, MusicService.class);
+        nextIntent.setAction(ACTION_NEXT);
+
+        PendingIntent nextPendingIntent = PendingIntent.getService
+                (this, 2, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // 3 close
+        Intent closeIntent = new Intent(this, MusicService.class);
+        closeIntent.setAction(ACTION_CLOSE);
+
+        PendingIntent closePendingIntent = PendingIntent.getService
+                (this, 3, closeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
 //
 //        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
 //        builder.setContentTitle(metadataCompat.getString(MediaMetadataCompat.METADATA_KEY_TITLE));
@@ -565,12 +629,21 @@ public class MusicService extends Service {
 
 
         //builder.setLargeIcon(metadataCompat.getBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART));
-        builder.addAction(R.drawable.ic_fast_rewind_black_24dp, "prew", null);
-        builder.addAction(R.drawable.ic_pause_circle_outline_black_24dp, "pause", null);
-        builder.addAction(R.drawable.ic_fast_forward_black_24dp, "next", null);
+        builder.addAction(R.drawable.ic_fast_rewind_black_24dp, "prev", prevPendingIntent);
 
-        // 본체 눌렀을때 동작 설정
+        // TODO resume 버튼 갱신
+        if (!mMediaPlayer.isPlaying()) {
+            builder.addAction(R.drawable.ic_pause_circle_outline_black_24dp, "resume", resumePendingIntent);
+        } else {
+            builder.addAction(R.drawable.ic_play_circle_outline_black_24dp, "resume", resumePendingIntent);
+        }
+
+        builder.addAction(R.drawable.ic_fast_forward_black_24dp, "next", nextPendingIntent);
+        builder.addAction(R.drawable.ic_close_black_24dp, "close", closePendingIntent);
+
+        // TODO 본체 눌렀을때 동작 설정 (PlayerFragment)
         Intent launchMusicActivity = new Intent(this, MainActivity.class);
+        launchMusicActivity.setAction(MainActivity.ACTION_RESTART_MAIN);
         PendingIntent sender = PendingIntent.getActivity(this, 1, launchMusicActivity, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(sender);
 
@@ -782,6 +855,34 @@ public class MusicService extends Service {
 
     }
 
+
+    @Subscribe
+    public void getRestartMainSignal(MyUtils.restartMainEvent event) {
+
+
+//        Toast.makeText(this, "테스트", Toast.LENGTH_SHORT).show();
+
+//        /**
+//         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#updateUI2(Boolean)}
+//         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateResumeImageview(Boolean)}
+//         */
+//        EventBus.getDefault().post(isPlaying());
+//
+//
+//        /**
+//         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.MusicControllerFragment#updateAlbumImage(MediaMetadataRetriever)}
+//         */
+//        EventBus.getDefault().post(mRetriever);
+
+
+        /**
+         * {@link com.hj.user.musicplayerproject.fragments.MainFragments.PlayerFragment#restartMainUpdateUI(MyUtils.restartUpdateUiEvent)}
+         */
+        MyUtils.restartUpdateUiEvent restartUpdateUiEvent = new MyUtils.restartUpdateUiEvent(isPlaying());
+        EventBus.getDefault().post(restartUpdateUiEvent);
+    }
+
+
     // 한곡 반복
     private void getRepeatOneSongUri() {
         mSongUriList.clear();
@@ -836,5 +937,11 @@ public class MusicService extends Service {
 
         Toast.makeText(this, "mSongUriList.toString " + mSongUriList.toString(), Toast.LENGTH_SHORT).show();
     }
+
+
+    public MediaPlayer getMediaPlayer() {
+        return mMediaPlayer;
+    }
+
 
 }
