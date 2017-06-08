@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.hj.user.musicplayerproject.activities.MainActivity">
+    tools:context="com.hj2.user.musicplayerproject.hj.hj.user.musicplayerproject.activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

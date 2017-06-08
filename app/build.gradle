@@ -5,18 +5,37 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.user.musicplayerproject"
+        applicationId 'com.hj2.user.musicplayerproject'
         minSdkVersion 22
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            storeFile file("../keystore.jks")     // 키스토어 위치
+            storePassword _storePassword
+            keyAlias _keyAlias
+            keyPassword _keyPassword
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            minifyEnabled false // 난독화
+            zipAlignEnabled true    // zipAlign
+            shrinkResources false     // 미사용 소스 제거
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    productFlavors {
     }
 }
 
@@ -25,8 +44,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
-
     compile 'com.android.support:appcompat-v7:25.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.0'

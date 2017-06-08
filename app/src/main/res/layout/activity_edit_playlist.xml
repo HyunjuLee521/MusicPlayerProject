@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.hj.user.musicplayerproject.activities.EditPlaylistActivity">
+    tools:context="com.hj2.user.musicplayerproject.activities.EditPlaylistActivity">
 
 
     <fragment
         android:id="@+id/edit_playlist_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.EditPlaylistFragments.EditPlaylistFragment"
+        android:name="com.hj2.user.musicplayerproject.fragments.EditPlaylistFragments.EditPlaylistFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/edit_controller_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.EditPlaylistFragments.EditControllerFragment"
+        android:name="com.hj2.user.musicplayerproject.fragments.EditPlaylistFragments.EditControllerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/edit_controller_fragment" />

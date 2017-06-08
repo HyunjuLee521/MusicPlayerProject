@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.hj.user.musicplayerproject.activities.SelectSongActivity">
+    tools:context="com.hj2.user.musicplayerproject.hj.hj.user.musicplayerproject.activities.SelectSongActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/send_song_frag"
-        android:name="com.hj.user.musicplayerproject.fragments.SelectSongFragments.SendSongToPlaylistFragment"
+        android:name="com.hj2.user.musicplayerproject.fragments.SelectSongFragments.SendSongToPlaylistFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:layout="@layout/send_song_to_playlist_fragment"></fragment>
