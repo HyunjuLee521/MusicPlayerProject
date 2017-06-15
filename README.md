@@ -3,6 +3,9 @@
 ## 2. 개발이력 및 기간
 ## 3. UI
 ## 4. Sutructure(Xmind)
+screenshot
+![screensh](https://github.com/HyunjuLee521/MusicPlayerProject/blob/master/structure.png)
+
 ## 5. Seatures
 ## 6. Credits
 ## 7. License
