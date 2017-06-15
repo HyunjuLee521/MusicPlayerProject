@@ -1,13 +1,13 @@
 # 심플뮤직플레이어 프로젝트
 ## 1. 개발환경
 1. 개발 툴 
-    >Android Studio 2.3
+    * Android Studio 2.3
 2. SDK 버전
     * minSdkVersion 22
     * targetSdkVersion 22
     * compileSdkVersion 25
 3. 버전관리 
-    >Git
+    * Git
 
 ## 2. 개발이력 및 기간
 ## 3. UI
@@ -28,14 +28,17 @@
 ## 6. Credits
 
 1. 안드로이드 이벤트 버스
-    >greenrobot / EventBus : https://github.com/greenrobot/EventBus
+    * greenrobot / EventBus : https://github.com/greenrobot/EventBus
 2. 렘
-    >realm : https://github.com/realm
+    * realm : https://github.com/realm
     
 
 
 ## 7. License
 Copyright 2017. Hyunju Lee
+
+
+
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
