@@ -17,8 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hj2.user.musicplayerproject.CursorRecyclerViewAdapter;
 import com.hj2.user.musicplayerproject.R;
+import com.hj2.user.musicplayerproject.activities.SelectSongActivity;
+import com.hj2.user.musicplayerproject.adapters.CursorRecyclerViewAdapter;
 import com.hj2.user.musicplayerproject.adapters.SelectSongByArtistListVIewAdapter;
 import com.hj2.user.musicplayerproject.models.ArtistName;
 
@@ -27,7 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-import com.hj2.user.musicplayerproject.activities.SelectSongActivity;
 import io.realm.Realm;
 
 /**
@@ -184,7 +184,7 @@ public class SelectSongByArtistFragment extends Fragment {
     }
 
 
-    // SongRecyclerAdapter
+    // SelectSongBySongCursorAdapter
     // 어댑터
     public static class SongRecyclerAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
 

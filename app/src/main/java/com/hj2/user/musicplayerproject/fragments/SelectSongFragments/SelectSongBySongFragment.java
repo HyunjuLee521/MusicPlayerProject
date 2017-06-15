@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hj2.user.musicplayerproject.CursorRecyclerViewAdapter;
+import com.hj2.user.musicplayerproject.adapters.CursorRecyclerViewAdapter;
 import com.hj2.user.musicplayerproject.models.ArtistName;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +35,7 @@ public class SelectSongBySongFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Realm mRealm;
     private ArrayList<Uri> mUriArrayLIst;
-    private SongRecyclerAdapter adapter;
+    private SelectSongBySongCursorAdapter adapter;
 
 
     @Override
@@ -71,10 +71,10 @@ public class SelectSongBySongFragment extends Fragment {
                         null);
 
 
-        adapter = new SongRecyclerAdapter(getContext(), cursor);
+        adapter = new SelectSongBySongCursorAdapter(getContext(), cursor);
 
         // 어댑터.아이템온클릭리스너
-        adapter.setOnItemClickListener(new SongRecyclerAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new SelectSongBySongCursorAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Uri uri, int position) {
 
@@ -126,7 +126,7 @@ public class SelectSongBySongFragment extends Fragment {
 
 
     // 어댑터
-    public static class SongRecyclerAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
+    public static class SelectSongBySongCursorAdapter extends CursorRecyclerViewAdapter<ViewHolder> {
 
 
         private ArrayList<ArtistName> mArtistNameData;
@@ -150,7 +150,7 @@ public class SelectSongBySongFragment extends Fragment {
         }
 
 
-        public SongRecyclerAdapter(Context context, Cursor cursor) {
+        public SelectSongBySongCursorAdapter(Context context, Cursor cursor) {
             super(context, cursor);
             mContext = context;
 

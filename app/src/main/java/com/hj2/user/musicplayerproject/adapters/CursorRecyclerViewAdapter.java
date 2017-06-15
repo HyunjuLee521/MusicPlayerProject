@@ -1,4 +1,4 @@
-package com.hj2.user.musicplayerproject;
+package com.hj2.user.musicplayerproject.adapters;
 
 /**
  * Created by USER on 2017-03-23.
