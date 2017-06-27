@@ -25,8 +25,8 @@
 1. 원하는 음악들을 선택하고 '플레이리스트에 추가하기' 버튼을 눌러 재생목록에 추가합니다.
     ![screensh](https://github.com/HyunjuLee521/MusicPlayerProject/blob/master/ui3.png)
 
-
 1. 재생목록에서 음악을 선택하여 재생합니다. '플레이어'와 하단의 '뮤직컨트롤러'에도 해당 음악 정보가 업데이트 됩니다.
+    ![screensh](https://github.com/HyunjuLee521/MusicPlayerProject/blob/master/ui4.png)
 
 1. 플레이어 화면에서 하트 버튼을 클릭하여, 현재 재생중인 곡을 즐겨찾기에 추가할 수 있습니다. 즐겨찾기에 추가된 곡들을 모아 기존의 '재생목록'과는 별개로 '즐겨찾는 재생목록'을 제공합니다.
 
