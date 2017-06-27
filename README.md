@@ -23,6 +23,8 @@
     ![screensh](https://github.com/HyunjuLee521/MusicPlayerProject/blob/master/ui2.png)
 
 1. 원하는 음악들을 선택하고 '플레이리스트에 추가하기' 버튼을 눌러 재생목록에 추가합니다.
+    ![screensh](https://github.com/HyunjuLee521/MusicPlayerProject/blob/master/ui3.png)
+
 
 1. 재생목록에서 음악을 선택하여 재생합니다. '플레이어'와 하단의 '뮤직컨트롤러'에도 해당 음악 정보가 업데이트 됩니다.
 
