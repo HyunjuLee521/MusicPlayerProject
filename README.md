@@ -50,13 +50,19 @@
 6. 이전에 재생하던 곡 목록을 실행시 복원
 7. 다른 미디어 플레이어가 재생될 때, 해당 어플에서 재생 중이던 곡 자동 일시 정지
 
-## 6. Credits
 
+
+## 6. Credits
 1. 안드로이드 이벤트 버스
     * greenrobot / EventBus : https://github.com/greenrobot/EventBus
+    
 2. 렘
     * realm : https://github.com/realm
     
+3. 글라이드
+    * bump / glide : https://github.com/bumptech/glide
+    
+
 
 
 ## 7. License
