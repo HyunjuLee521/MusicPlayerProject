@@ -379,7 +379,10 @@ public class MusicService extends Service {
         if (mIndex > mSongUriList.size() - 1) {
             mIndex = 0;
         }
-        playMusicList2(mSongUriList.get(mIndex), mIndex);
+
+        if (mSongUriList.size() > 0) {
+            playMusicList2(mSongUriList.get(mIndex), mIndex);
+        }
     }
 
 
@@ -403,7 +406,10 @@ public class MusicService extends Service {
         if (mIndex < 0) {
             mIndex = mSongUriList.size() - 1;
         }
-        playMusicList2(mSongUriList.get(mIndex), mIndex);
+
+        if(mSongUriList.size() > 0) {
+            playMusicList2(mSongUriList.get(mIndex), mIndex);
+        }
 
     }
 
@@ -547,15 +553,34 @@ public class MusicService extends Service {
 
     private void getLolliNotification() {
 
-        String title = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-        String artist = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
-        Bitmap album = byteArrayToBitmap(mRetriever.getEmbeddedPicture());
+        String title;
+        if (mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null) {
+            title = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        } else {
+            title = "알 수 없는 타이틀";
+        }
+
+        String artist = null;
+        if (mRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) != null) {
+            artist = mRetriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        } else {
+            title = "알 수 없는 아티스트";
+        }
+
+        Bitmap album;
+        if (mRetriever.getEmbeddedPicture() != null) {
+            album = byteArrayToBitmap(mRetriever.getEmbeddedPicture());
+        } else {
+            album = null;
+        }
+
 
         MediaMetadataCompat metadataCompat = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, artist)
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, album)
                 .build();
+
 
         if (mSession == null) {
             mSession = new MediaSessionCompat(this, "tag", null, null);

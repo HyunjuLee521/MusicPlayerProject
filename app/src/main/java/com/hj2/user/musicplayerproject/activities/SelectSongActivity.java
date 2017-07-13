@@ -91,11 +91,13 @@ public class SelectSongActivity extends AppCompatActivity {
 
 
                 if (selectedSongUriList.size() > 0) {
-
+                    int index = 0;
 
                     for (Uri uri : selectedSongUriList) {
-                        getSongToPlaylist(uri);
+                        getSongToPlaylist(uri, index);
+                        index++;
                     }
+
 
                     Toast.makeText(SelectSongActivity.this, selectedSongUriList.size() + " 개의 음악을 플레이리스트에 추가합니다"
                             , Toast.LENGTH_SHORT).show();
@@ -230,7 +232,7 @@ public class SelectSongActivity extends AppCompatActivity {
 
     // uri값 받아와서
     // Realm 테이블 MusicFile에 저장
-    public void getSongToPlaylist(Uri uri) {
+    public void getSongToPlaylist(Uri uri, int index) {
 
         final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 //        retriever.setDataSource(MyUtils.getRealPath(this, uri));
@@ -238,8 +240,21 @@ public class SelectSongActivity extends AppCompatActivity {
 
         // 미디어 정보
         final String mUri = uri.toString();
-        final String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-        final String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+        final String title;
+        if (retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE)) != null) {
+            title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+        } else {
+            title = "알 수 없는 타이틀 " +index;
+        }
+
+        final String artist ;
+        if (retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST))!=null) {
+            artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+        } else {
+            artist = "알 수 없는 아티스트";
+        }
+
         final String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
 
         // 오디오 앨범 자켓 이미지

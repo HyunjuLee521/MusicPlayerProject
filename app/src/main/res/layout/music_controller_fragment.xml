@@ -5,12 +5,16 @@
     android:orientation="horizontal"
     android:padding="4dp">
 
-
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="4dp" />
 
         <ImageView
             android:id="@+id/prev_imageview"
@@ -36,6 +40,10 @@
             android:text="뒷곡" />
 
     </LinearLayout>
+
+
+
+
 
     <ImageView
         android:id="@+id/change_mode_imageview"

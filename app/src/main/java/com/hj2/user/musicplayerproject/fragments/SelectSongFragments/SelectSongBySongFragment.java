@@ -134,6 +134,10 @@ public class SelectSongBySongFragment extends Fragment {
         // 선택아이템담을 배열선언
         private SparseBooleanArray mSelectedItem;
 
+        // TODO 테스트중
+        private int artistIsNull;
+        private int artistIsNotNull;
+
 
         // 온아이템클릭시 -> 콜백 위한 처리들
         // 1. 보내줄 정보 인터페이스로 정리
@@ -156,6 +160,11 @@ public class SelectSongBySongFragment extends Fragment {
 
             mArtistNameData = new ArrayList<ArtistName>();
             mSelectedUriArraylist = new ArrayList<Uri>();
+
+
+            // TODO 테스트중
+            ArtistName nullNameData = new ArtistName("알 수 없는 아티스트", 0);
+//            mArtistNameData.add(nullNameData);
 
 
             // 배열 초기화
@@ -182,7 +191,6 @@ public class SelectSongBySongFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-
 
                     // TODO position 구해서 보내기
                     // TODO 색깔 바꾸기 여기서
@@ -225,32 +233,55 @@ public class SelectSongBySongFragment extends Fragment {
             retriever.setDataSource(mContext, uri);
 
             // 미디어 정보
-            String title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
-            String artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+
+            String title;
+            String artist;
+
+            if (retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE)) != null) {
+                title = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_TITLE));
+            } else {
+                title = "알 수 없는 타이틀" + position;
+            }
+
+            if (retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST)) != null) {
+                artist = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_ARTIST));
+            } else {
+                artist = "알 수 없는 아티스트";
+            }
+
             String duration = retriever.extractMetadata((MediaMetadataRetriever.METADATA_KEY_DURATION));
 
 
             viewHolder.titleTextView.setText(title);
             viewHolder.artistTextView.setText(artist);
 
-
             // SelectSongByArtistFragment로 보낼 -.
             // 아티스트 뽑기
-            boolean isDuplicated = false;
-            for (ArtistName artistName : mArtistNameData) {
-                if (artistName.getName().equals(artist)) {
-                    artistName.setCnt(artistName.getCnt() + 1);
-                    isDuplicated = true;
+            if (!artist.equals("알 수 없는 아티스트") && duration != null) {
+                boolean isDuplicated = false;
+                for (ArtistName artistName : mArtistNameData) {
+                    if (artistName.getName().equals(artist)) {
+                        artistName.setCnt(artistName.getCnt() + 1);
+                        isDuplicated = true;
 //                    Toast.makeText(mContext, "data갯수 : " + mArtistNameData.size() + " /중복된 아티스트 " + artistName.getName() + "에 넣는다" + artistName.getCnt(), Toast.LENGTH_SHORT).show();
-                    break;
+                        break;
+                    }
                 }
-            }
 
-            if (!isDuplicated) {
-                mArtistNameData.add(new ArtistName(artist, 1));
+                if (!isDuplicated) {
+                    mArtistNameData.add(new ArtistName(artist, 1));
 //                Toast.makeText(mContext, "data갯수 : " + mArtistNameData.size() + " /새로운 아티스트 " + artist + "에 cnt1 넣는다", Toast.LENGTH_SHORT).show();
+                }
+                artistIsNotNull++;
+
+            } else {
+                artistIsNull++;
             }
 
+//            Toast.makeText(mContext, "mArtistNameData에 담긴 아티스트" + mArtistNameData.toString(), Toast.LENGTH_SHORT).show();
+
+//            Toast.makeText(mContext, "아티스트가 널인 노래는 총 " + artistIsNull
+//                    + "\n아티스트가 널이 아닌 노래는 총 " + artistIsNotNull, Toast.LENGTH_SHORT).show();
 
             // TODO Realm으로 뽑기
 //            Realm realm = Realm.getDefaultInstance();

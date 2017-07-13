@@ -42,8 +42,6 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
     public SelectSongByArtistListVIewAdapter(Context context, ArrayList<ArtistName> data) {
         mData = new ArrayList<ArtistName>();
         mData = data;
-
-
     }
 
     @Override
@@ -54,6 +52,7 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
 
         // 아이템 클릭 시
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +69,7 @@ public class SelectSongByArtistListVIewAdapter extends RecyclerView.Adapter<Sele
         // 미디어 정보
         String artist = mData.get(position).getName();
         int count = mData.get(position).getCnt();
+
 
         holder.artistTextView.setText(artist);
         holder.countTextView.setText(" " + count);
