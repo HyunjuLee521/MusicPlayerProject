@@ -218,6 +218,7 @@ public class MusicService extends Service {
 
 
             } else if (ACTION_RESUME.equals(action) && mMediaPlayer != null) {
+                // TODO 노티
                 getLolliNotification();
 
                 if (playMode.equals("shuffle")) {
@@ -479,7 +480,10 @@ public class MusicService extends Service {
             // foreground service
 //            showNotification();
 
+
+            // TODO 노티
             getLolliNotification();
+//            getNotification();
 
         } catch (IOException e) {
             e.printStackTrace();

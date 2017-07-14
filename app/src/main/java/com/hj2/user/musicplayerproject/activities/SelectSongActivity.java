@@ -173,7 +173,7 @@ public class SelectSongActivity extends AppCompatActivity {
                 && mViewPager.getCurrentItem() == 1
                 && mSelectSongByArtistFragment.getAdapterStatus() == 2) {
 
-            Toast.makeText(SelectSongActivity.this, "뒤로가기 테스트", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SelectSongActivity.this, "뒤로가기 테스트", Toast.LENGTH_SHORT).show();
             mSelectSongByArtistFragment.changeAdapter();
 
         } else {

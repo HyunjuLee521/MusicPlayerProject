@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.hj2.user.musicplayerproject.R;
 import com.hj2.user.musicplayerproject.activities.MainActivity;
 import com.hj2.user.musicplayerproject.activities.SelectSongActivity;
@@ -293,16 +295,80 @@ public class PlaylistFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             // "가져오기" 버튼 눌렀을 때
             case R.id.pick_button:
-                Intent intent = new Intent(getContext(), SelectSongActivity.class);
-                // 이벤트 버스로 바꿔야 하나? 순환참조 발생안한다! 그냥 써도 괜찮아
-                // 주거니 받거니
-                getActivity().startActivityForResult(intent, MOVE_SELECTSONG_REQUEST_CODE);
-                getActivity().overridePendingTransition(0, 0);
+
+                PermissionListener permissionListener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        Intent intent = new Intent(getContext(), SelectSongActivity.class);
+                        // 이벤트 버스로 바꿔야 하나? 순환참조 발생안한다! 그냥 써도 괜찮아
+                        // 주거니 받거니
+                        getActivity().startActivityForResult(intent, MOVE_SELECTSONG_REQUEST_CODE);
+                        getActivity().overridePendingTransition(0, 0);
+                    }
+
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                    }
+                };
+
+                // TODO 메시지 안나옴
+                new TedPermission(getContext()).setPermissionListener(permissionListener)
+                        .setRationaleMessage("[필수권한] 이 기능은 외부 저장소에 접근 권한이 필요합니다.")
+                        .setDeniedMessage(new StringModifier("[필수권한] 이 기능은 외부 저장소에 접근 권한이 필요합니다.")
+                                .newLine()
+                                .newLine()
+                                .addText("설정 메뉴에서 언제든지 권한을 변경 할 수 있습니다. [설정] - [권한] 으로 이동하셔서 권한을 허용하신후 이용하시기 바랍니다.")
+                                .end())
+                        .setPermissions(
+                                android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        .check();
+
+
                 break;
 
             default:
                 break;
 
+        }
+    }
+
+
+    public class StringModifier {
+        private String string;
+
+        public StringModifier(String string) {
+            this.string = string;
+        }
+
+        /**
+         * 해당 문자열에 줄바꿈을 적용한다.
+         */
+        public StringModifier newLine() {
+            string += "\n";
+            return this;
+        }
+
+        /**
+         * 해당 문자열에 텍스트를 추가한다.
+         */
+        public StringModifier addText(CharSequence addedText) {
+            string += addedText;
+            return this;
+        }
+
+        /**
+         * 해당 문자열에 trim 을 한다.
+         */
+        public StringModifier trim() {
+            string = string.trim();
+            return this;
+        }
+
+        /**
+         * 최종적으로 모든 값이 적용된 문자열을 리턴한다.
+         */
+        public String end() {
+            return string;
         }
     }
 

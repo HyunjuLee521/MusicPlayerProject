@@ -20,9 +20,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.hj2.user.musicplayerproject.R;
+import com.hj2.user.musicplayerproject.models.FavoriteMusicFile;
+import com.hj2.user.musicplayerproject.models.MusicFile;
+import com.hj2.user.musicplayerproject.services.MusicService;
+import com.hj2.user.musicplayerproject.utils.MyUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,11 +34,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import com.hj2.user.musicplayerproject.R;
-import com.hj2.user.musicplayerproject.models.FavoriteMusicFile;
-import com.hj2.user.musicplayerproject.models.MusicFile;
-import com.hj2.user.musicplayerproject.services.MusicService;
-import com.hj2.user.musicplayerproject.utils.MyUtils;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -185,7 +184,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener {
     @Subscribe
     public void restartMainUpdateUI(MyUtils.restartUpdateUiEvent event) {
         boolean isPlaying = event.isPlaying;
-        Toast.makeText(getContext(), "updatdUi 이벤트버스 도착, isPlaying 값 " + isPlaying, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "updatdUi 이벤트버스 도착, isPlaying 값 " + isPlaying, Toast.LENGTH_SHORT).show();
 
         updateUI2(isPlaying);
     }
